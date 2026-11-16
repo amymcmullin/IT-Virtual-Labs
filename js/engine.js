@@ -51,7 +51,7 @@
     $('practice-box').hidden = mode !== 'practice';
     $('hint-list').innerHTML = ''; $('hint-btn').disabled = false; $('hint-btn').textContent = 'Show a hint';
     var tabs = $('tabs'), panes = $('panes'); tabs.innerHTML = ''; panes.innerHTML = ''; mounted = {};
-    var ctx = { state: state, lab: lab, world: lab.world, log: addLog, changed: refresh };
+    var ctx = { state: state, lab: lab, world: lab.world, log: addLog, changed: refresh, mode: mode };
     lab.surfaces.forEach(function (name, i) {
       var s = Surfaces[name];
       var b = document.createElement('button'); b.type = 'button'; b.textContent = s.title; b.id = 'tab-' + name;
@@ -120,8 +120,8 @@
       return '<li class="' + (r.ok ? 'ok' : 'miss') + '"><div class="rc-head"><span class="mark" aria-hidden="true">' + (r.ok ? '✓' : '✗') + '</span><strong>' + esc(r.label) + '</strong><span class="pts">' + (r.ok ? r.points : 0) + '/' + r.points + '</span></div><p><span class="sr">' + (r.ok ? 'Met. ' : 'Missed. ') + '</span>' + esc(r.text) + '</p></li>';
     }).join('');
     $('r-timeline').innerHTML = log.length ? log.map(function (e) {
-      var kind = e.type === 'cmd' ? 'Command' : e.type === 'change' ? 'Change' : 'Hint';
-      return '<li class="t-' + e.type + '"><span class="t-time">' + clock(e.t) + '</span><span class="t-kind">' + kind + '</span><span class="t-text">' + esc(e.text) + (e.type === 'cmd' && e.ok === false ? ' <em>(failed)</em>' : '') + '</span></li>';
+      var kind = { cmd: 'Command', change: 'Change', hint: 'Hint', test: 'Test', attempt: 'Attempt' }[e.type] || 'Action';
+      return '<li class="t-' + e.type + '"><span class="t-time">' + clock(e.t) + '</span><span class="t-kind">' + kind + '</span><span class="t-text">' + esc(e.text) + ((e.type === 'cmd' || e.type === 'test') && e.ok === false ? ' <em>(failed)</em>' : '') + '</span></li>';
     }).join('') : '<li>No actions were recorded.</li>';
     $('r-code').value = code;
     $('r-copied').textContent = '';

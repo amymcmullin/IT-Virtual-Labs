@@ -85,6 +85,28 @@
           "2.8"
         ]
       }
+    },
+    {
+      "id": "bench-cables",
+      "title": "Build the workstation: connect the right cables",
+      "summary": "Connect power, monitor, network, input devices, headset and a backup drive to the right ports on the back of a PC, then power it on.",
+      "minutes": 10,
+      "level": "Foundation",
+      "surfaces": [
+        "Workbench"
+      ],
+      "objectives": {
+        "A+ Core 1 (220-1201)": [
+          "3.2"
+        ],
+        "CCST IT Support": [
+          "2.3"
+        ],
+        "Tech+ (FC0-U71)": [
+          "2.4",
+          "2.5"
+        ]
+      }
     }
   ],
   "sets": {
@@ -94,6 +116,12 @@
         "net-apipa",
         "net-no-internet",
         "net-dns"
+      ]
+    },
+    "hardware-basics": {
+      "title": "Hardware basics",
+      "labs": [
+        "bench-cables"
       ]
     }
   }

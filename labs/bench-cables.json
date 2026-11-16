@@ -1,0 +1,388 @@
+{
+  "id": "bench-cables",
+  "version": 1,
+  "title": "Build the workstation: connect the right cables",
+  "scenario": "Work order #2207 \u2014 Set up the new PC for Priya in the design office. This PC has a dedicated graphics card. Her monitor's only free input is DisplayPort. She needs wired network, keyboard, mouse, her headset (separate headphone and microphone plugs), and the external backup drive, which must be on a fast USB port because it runs the nightly backup. Not every cable in the tray is needed.",
+  "tasks": [
+    "Connect power and make sure the PC can turn on.",
+    "Connect the monitor so it will actually show a picture.",
+    "Connect the network, keyboard, mouse, headset and backup drive to suitable ports.",
+    "Press the power button and check your work before you finish."
+  ],
+  "surfaces": [
+    "bench"
+  ],
+  "initialState": {
+    "bench": {
+      "conn": {},
+      "switchOn": false
+    }
+  },
+  "world": {},
+  "bench": {
+    "dedicatedGpu": true,
+    "groups": [
+      {
+        "label": "Power supply",
+        "y": 8,
+        "h": 118
+      },
+      {
+        "label": "Motherboard ports",
+        "y": 140,
+        "h": 170
+      },
+      {
+        "label": "Expansion slots",
+        "y": 324,
+        "h": 150
+      }
+    ],
+    "ports": [
+      {
+        "id": "pwr",
+        "type": "c14",
+        "x": 40,
+        "y": 44,
+        "role": "power-in",
+        "name": "Power inlet (IEC C14)",
+        "look": "large three-pin socket on the power supply"
+      },
+      {
+        "id": "sw",
+        "type": "switch",
+        "x": 150,
+        "y": 52,
+        "role": "switch",
+        "name": "Power supply switch",
+        "look": "rocker switch on the power supply"
+      },
+      {
+        "id": "usb2a",
+        "type": "usb-a",
+        "x": 40,
+        "y": 172,
+        "color": "#1b1b1b",
+        "speed": 2,
+        "name": "USB 2.0 port (black), upper",
+        "look": "flat rectangular port with a black insert, upper"
+      },
+      {
+        "id": "usb2b",
+        "type": "usb-a",
+        "x": 40,
+        "y": 204,
+        "color": "#1b1b1b",
+        "speed": 2,
+        "name": "USB 2.0 port (black), lower",
+        "look": "flat rectangular port with a black insert, lower"
+      },
+      {
+        "id": "mbdp",
+        "type": "dp",
+        "x": 120,
+        "y": 172,
+        "gpu": false,
+        "name": "Motherboard DisplayPort",
+        "look": "wide port with one angled corner, on the motherboard"
+      },
+      {
+        "id": "mbhdmi",
+        "type": "hdmi",
+        "x": 120,
+        "y": 204,
+        "gpu": false,
+        "name": "Motherboard HDMI",
+        "look": "wide port with two angled corners, on the motherboard"
+      },
+      {
+        "id": "usb3a",
+        "type": "usb-a",
+        "x": 40,
+        "y": 248,
+        "color": "#1f6fd1",
+        "speed": 3,
+        "name": "USB 3 port (blue), upper",
+        "look": "flat rectangular port with a blue insert, upper"
+      },
+      {
+        "id": "usb3b",
+        "type": "usb-a",
+        "x": 40,
+        "y": 280,
+        "color": "#1f6fd1",
+        "speed": 3,
+        "name": "USB 3 port (blue), lower",
+        "look": "flat rectangular port with a blue insert, lower"
+      },
+      {
+        "id": "usbc",
+        "type": "usb-c",
+        "x": 126,
+        "y": 252,
+        "name": "USB-C port",
+        "look": "small oval port"
+      },
+      {
+        "id": "rj45",
+        "type": "rj45",
+        "x": 196,
+        "y": 244,
+        "name": "Ethernet port (RJ45)",
+        "look": "square port with a clip notch"
+      },
+      {
+        "id": "ain",
+        "type": "audio",
+        "x": 292,
+        "y": 180,
+        "color": "#4a90d9",
+        "func": "linein",
+        "name": "Line in (blue)",
+        "look": "round jack with a blue ring"
+      },
+      {
+        "id": "aout",
+        "type": "audio",
+        "x": 292,
+        "y": 222,
+        "color": "#4caf50",
+        "func": "out",
+        "name": "Line out (green)",
+        "look": "round jack with a green ring"
+      },
+      {
+        "id": "amic",
+        "type": "audio",
+        "x": 292,
+        "y": 264,
+        "color": "#e77fa8",
+        "func": "mic",
+        "name": "Microphone in (pink)",
+        "look": "round jack with a pink ring"
+      },
+      {
+        "id": "gdp",
+        "type": "dp",
+        "x": 40,
+        "y": 350,
+        "gpu": true,
+        "name": "Graphics card DisplayPort",
+        "look": "wide port with one angled corner, on the expansion card"
+      },
+      {
+        "id": "ghdmi",
+        "type": "hdmi",
+        "x": 120,
+        "y": 349,
+        "gpu": true,
+        "name": "Graphics card HDMI",
+        "look": "wide port with two angled corners, on the expansion card"
+      }
+    ],
+    "items": [
+      {
+        "id": "cord",
+        "name": "Power cord",
+        "fits": "c14",
+        "role": "power"
+      },
+      {
+        "id": "dpc",
+        "name": "DisplayPort cable (from monitor)",
+        "fits": "dp",
+        "role": "video",
+        "works": true
+      },
+      {
+        "id": "hdmic",
+        "name": "HDMI cable (spare)",
+        "fits": "hdmi",
+        "role": "video",
+        "works": false,
+        "whyNot": "the HDMI cable has nowhere to go at the monitor end, because the monitor's only free input is DisplayPort"
+      },
+      {
+        "id": "eth",
+        "name": "Ethernet patch cable",
+        "fits": "rj45",
+        "role": "net"
+      },
+      {
+        "id": "kbd",
+        "name": "Keyboard (USB)",
+        "fits": "usb-a",
+        "role": "kbd"
+      },
+      {
+        "id": "mouse",
+        "name": "Mouse (USB)",
+        "fits": "usb-a",
+        "role": "mouse"
+      },
+      {
+        "id": "drive",
+        "name": "External backup drive (USB 3)",
+        "fits": "usb-a",
+        "role": "storage"
+      },
+      {
+        "id": "hp",
+        "name": "Headset: headphone plug",
+        "fits": "audio",
+        "role": "audio-out"
+      },
+      {
+        "id": "mic",
+        "name": "Headset: microphone plug",
+        "fits": "audio",
+        "role": "audio-in"
+      }
+    ]
+  },
+  "hints": [
+    "Nothing else matters until the PC has power. Look at the power supply: there are two things to deal with there, not one.",
+    "Two rows of video ports look the same. When a PC has a dedicated graphics card, the ports on the motherboard are normally switched off.",
+    "Read the work order again for the monitor. Which of the two video cables can actually plug into the monitor?",
+    "USB plugs fit both the black and the blue ports. Blue marks USB 3, which is much faster. Which device in the work order needs speed?",
+    "Audio jacks are colour coded: green is sound out to headphones or speakers, pink is the microphone, blue is line in.",
+    "Press the power button and read what the bench reports. It tells you what a technician would see."
+  ],
+  "checks": [
+    {
+      "id": "power",
+      "points": 10,
+      "type": "bench",
+      "need": [
+        {
+          "item": "cord",
+          "ports": [
+            "pwr"
+          ]
+        }
+      ],
+      "switchOn": true,
+      "label": "Power cord connected and power supply switched on",
+      "pass": "The cord is in the inlet and the supply's rocker switch is on.",
+      "fail": "The PC has no power. It needs the power cord in the inlet and the rocker switch on the power supply set to on (I)."
+    },
+    {
+      "id": "video",
+      "points": 20,
+      "type": "bench",
+      "need": [
+        {
+          "item": "dpc",
+          "ports": [
+            "gdp"
+          ]
+        }
+      ],
+      "label": "Monitor connected to the graphics card with the DisplayPort cable",
+      "pass": "The DisplayPort cable is on the graphics card, which is the only output that is active on this PC.",
+      "fail": "The monitor will not show a picture. Use the DisplayPort cable (the monitor's only free input) on the graphics card in the expansion slot, not on the motherboard ports, which are disabled when a dedicated card is installed."
+    },
+    {
+      "id": "net",
+      "points": 10,
+      "type": "bench",
+      "need": [
+        {
+          "item": "eth",
+          "ports": [
+            "rj45"
+          ]
+        }
+      ],
+      "label": "Network cable connected",
+      "pass": "The Ethernet cable is in the RJ45 port.",
+      "fail": "The Ethernet patch cable is not connected to the RJ45 port."
+    },
+    {
+      "id": "input",
+      "points": 10,
+      "type": "bench",
+      "need": [
+        {
+          "item": "kbd",
+          "ports": [
+            "usb2a",
+            "usb2b",
+            "usb3a",
+            "usb3b"
+          ]
+        },
+        {
+          "item": "mouse",
+          "ports": [
+            "usb2a",
+            "usb2b",
+            "usb3a",
+            "usb3b"
+          ]
+        }
+      ],
+      "label": "Keyboard and mouse connected",
+      "pass": "Both input devices are on USB ports.",
+      "fail": "The keyboard and mouse both need a USB port."
+    },
+    {
+      "id": "drive",
+      "points": 15,
+      "type": "bench",
+      "need": [
+        {
+          "item": "drive",
+          "ports": [
+            "usb3a",
+            "usb3b"
+          ]
+        }
+      ],
+      "label": "Backup drive on a fast (USB 3) port",
+      "pass": "The backup drive is on a blue USB 3 port, so backups run at full speed.",
+      "fail": "The backup drive is not on a blue USB 3 port. It fits a black USB 2.0 port, but it would run many times slower, and the work order asked for a fast port."
+    },
+    {
+      "id": "audio",
+      "points": 15,
+      "type": "bench",
+      "need": [
+        {
+          "item": "hp",
+          "ports": [
+            "aout"
+          ]
+        },
+        {
+          "item": "mic",
+          "ports": [
+            "amic"
+          ]
+        }
+      ],
+      "label": "Headset plugs in the correct audio jacks",
+      "pass": "Headphones are on line out (green) and the microphone is on mic in (pink).",
+      "fail": "The headset is not connected correctly. The headphone plug goes to the green jack (line out) and the microphone plug to the pink jack; the blue jack is line in."
+    },
+    {
+      "id": "clean",
+      "points": 10,
+      "type": "log_none",
+      "tag": "misfit",
+      "label": "Did not try to plug a connector into a port it does not fit",
+      "pass": "Every connector you tried went to a port of the right type.",
+      "fail": "You tried at least one connector in a port it does not fit. Match the connector shape to the port before pushing; forcing one bends pins."
+    },
+    {
+      "id": "verify",
+      "points": 10,
+      "type": "log",
+      "tag": "power:ok",
+      "when": "after_last_change",
+      "label": "Powered on and saw the desktop after the last change",
+      "pass": "You tested the finished build and it started with a picture.",
+      "fail": "You did not power the PC on successfully after your last change. Always test a build before handing it over."
+    }
+  ]
+}

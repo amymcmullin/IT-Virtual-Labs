@@ -5,6 +5,12 @@
   function evalCheck(c, state, log, world) {
     if (c.type === 'state') return getPath(state, c.path) === c.equals;
     if (c.type === 'probe') return !!Net.probes[c.probe](state, world);
+    if (c.type === 'bench') {
+      var bs = state.bench || { conn: {} };
+      if (c.switchOn && !bs.switchOn) return false;
+      return (c.need || []).every(function (n) { return n.ports.indexOf(bs.conn[n.item]) !== -1; });
+    }
+    if (c.type === 'log_none') return !log.some(function (e) { return e.tags && e.tags.indexOf(c.tag) !== -1; });
     if (c.type === 'log') {
       var first = -1, last = -1;
       log.forEach(function (e, i) { if (e.type === 'change') { if (first === -1) first = i; last = i; } });
