@@ -1,0 +1,129 @@
+{
+  "id": "net-dns",
+  "version": 1,
+  "title": "Websites won't load by name",
+  "scenario": "Ticket #4530 \u2014 Marcus in accounting (ACCT-PC-07) says no websites will open and the 'fileserver' shortcut stopped working, but his video call, which connects by IP address, is fine. The old DNS server (192.168.10.100) was retired last weekend. Site standard: workstations get both their IP address and their DNS server automatically.",
+  "tasks": [
+    "Review the PC's full network configuration.",
+    "Show whether the problem is reaching addresses or looking up names.",
+    "Correct the configuration so it follows the site standard.",
+    "Prove names resolve before you close the ticket."
+  ],
+  "surfaces": [
+    "terminal",
+    "netsettings"
+  ],
+  "initialState": {
+    "hostname": "ACCT-PC-07",
+    "user": "labtech",
+    "net": {
+      "mode": "dhcp",
+      "leased": true,
+      "dnsMode": "manual",
+      "static": {
+        "ip": "",
+        "mask": "",
+        "gateway": "",
+        "dns": "192.168.10.100"
+      }
+    }
+  },
+  "world": {
+    "mask": "255.255.255.0",
+    "gateway": "192.168.10.1",
+    "dnsServers": [
+      "192.168.10.10"
+    ],
+    "dhcp": {
+      "ip": "192.168.10.112",
+      "mask": "255.255.255.0",
+      "gateway": "192.168.10.1",
+      "dns": "192.168.10.10",
+      "server": "192.168.10.1"
+    },
+    "localHosts": [
+      "192.168.10.1",
+      "192.168.10.10",
+      "192.168.10.20"
+    ],
+    "remoteHosts": [
+      "8.8.8.8",
+      "1.1.1.1",
+      "203.0.113.80"
+    ],
+    "names": {
+      "fileserver": "192.168.10.20",
+      "www.example.com": "203.0.113.80"
+    }
+  },
+  "hints": [
+    "Plain ipconfig does not show DNS servers. Which switch shows the full configuration?",
+    "Ping an outside IP address (8.8.8.8), then ping a name (www.example.com). Which one fails?",
+    "If addresses work and names do not, the network path is fine and name lookup is broken. nslookup shows which DNS server the PC is asking.",
+    "Compare the DNS server in ipconfig /all with the server the ticket says was retired.",
+    "Open Network Settings. The IP address is automatic, but the DNS server was typed in by hand. Set it to automatic and test a name again."
+  ],
+  "checks": [
+    {
+      "id": "inspect",
+      "points": 15,
+      "type": "log",
+      "tag": "ipconfig:all",
+      "when": "before_first_change",
+      "label": "Reviewed the full configuration (ipconfig /all) before changing anything",
+      "pass": "You ran ipconfig /all first, which is the view that shows the DNS server.",
+      "fail": "You did not run ipconfig /all before making a change. Plain ipconfig hides the DNS server, which is where this fault is."
+    },
+    {
+      "id": "byip",
+      "points": 10,
+      "type": "log",
+      "tag": "ping:remote",
+      "ok": true,
+      "when": "before_first_change",
+      "label": "Showed that outside addresses are reachable by IP",
+      "pass": "A successful ping to an outside IP proved the network path was fine.",
+      "fail": "You did not ping an outside IP address before changing anything. That test is what rules out the gateway and the connection."
+    },
+    {
+      "id": "byname",
+      "points": 10,
+      "type": "log",
+      "tag": "name-test",
+      "when": "before_first_change",
+      "label": "Tested name lookup before changing anything",
+      "pass": "You tested a name (ping by name or nslookup) and saw the lookup fail.",
+      "fail": "You did not test a name with ping or nslookup before changing anything, so you had no evidence the fault was DNS."
+    },
+    {
+      "id": "resolves",
+      "points": 30,
+      "type": "probe",
+      "probe": "dns",
+      "label": "Names resolve and sites are reachable",
+      "pass": "The PC can look up names and reach the sites behind them.",
+      "fail": "Names still do not resolve. The PC is asking 192.168.10.100, the retired server; it needs a working DNS server."
+    },
+    {
+      "id": "standard",
+      "points": 15,
+      "type": "state",
+      "path": "net.dnsMode",
+      "equals": "auto",
+      "label": "The DNS server follows the site standard (automatic)",
+      "pass": "The DNS server now comes from DHCP, so the next server change will not break this PC.",
+      "fail": "The DNS server is still typed in by hand. Even with a working address, a manual entry is what caused this ticket and breaks the site standard."
+    },
+    {
+      "id": "verify",
+      "points": 20,
+      "type": "log",
+      "tag": "name-test",
+      "ok": true,
+      "when": "after_last_change",
+      "label": "Verified the fix with a successful name test",
+      "pass": "After your last change you confirmed a name resolves.",
+      "fail": "You did not run a successful ping by name or nslookup after your last change. Verify with the same kind of test that showed the fault."
+    }
+  ]
+}

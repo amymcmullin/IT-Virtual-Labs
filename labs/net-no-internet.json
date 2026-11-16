@@ -2,31 +2,59 @@
   "id": "net-no-internet",
   "version": 1,
   "title": "Front office PC can't get online",
-  "scenario": "Ticket #4471 — Dana at the front desk reports that her PC (FRONT-OFFICE-03) can open the shared drive but no websites will load. Nobody else in the office has the problem. A contractor worked on her PC last week. Site standard: every workstation gets its address automatically from the office DHCP server.",
+  "scenario": "Ticket #4471 \u2014 Dana at the front desk reports that her PC (FRONT-OFFICE-03) can open the shared drive but no websites will load. Nobody else in the office has the problem. A contractor worked on her PC last week. Site standard: every workstation gets its address automatically from the office DHCP server.",
   "tasks": [
     "Find out how the PC's network adapter is currently configured.",
     "Test what the PC can and cannot reach.",
     "Correct the configuration so it follows the site standard.",
     "Prove the fix worked before you close the ticket."
   ],
-  "surfaces": ["terminal", "netsettings"],
+  "surfaces": [
+    "terminal",
+    "netsettings"
+  ],
   "initialState": {
     "hostname": "FRONT-OFFICE-03",
     "user": "labtech",
     "net": {
       "mode": "static",
       "leased": true,
-      "static": { "ip": "192.168.10.57", "mask": "255.255.255.0", "gateway": "192.168.1.1", "dns": "192.168.10.10" }
+      "static": {
+        "ip": "192.168.10.57",
+        "mask": "255.255.255.0",
+        "gateway": "192.168.1.1",
+        "dns": "192.168.10.10"
+      },
+      "dnsMode": "manual"
     }
   },
   "world": {
     "mask": "255.255.255.0",
     "gateway": "192.168.10.1",
-    "dnsServers": ["192.168.10.10"],
-    "dhcp": { "ip": "192.168.10.112", "mask": "255.255.255.0", "gateway": "192.168.10.1", "dns": "192.168.10.10", "server": "192.168.10.1" },
-    "localHosts": ["192.168.10.1", "192.168.10.10", "192.168.10.20"],
-    "remoteHosts": ["8.8.8.8", "1.1.1.1", "203.0.113.80"],
-    "names": { "fileserver": "192.168.10.20", "www.example.com": "203.0.113.80" }
+    "dnsServers": [
+      "192.168.10.10"
+    ],
+    "dhcp": {
+      "ip": "192.168.10.112",
+      "mask": "255.255.255.0",
+      "gateway": "192.168.10.1",
+      "dns": "192.168.10.10",
+      "server": "192.168.10.1"
+    },
+    "localHosts": [
+      "192.168.10.1",
+      "192.168.10.10",
+      "192.168.10.20"
+    ],
+    "remoteHosts": [
+      "8.8.8.8",
+      "1.1.1.1",
+      "203.0.113.80"
+    ],
+    "names": {
+      "fileserver": "192.168.10.20",
+      "www.example.com": "203.0.113.80"
+    }
   },
   "hints": [
     "Start by looking, not changing. Which command shows the adapter's IP address, subnet mask and default gateway?",
@@ -37,31 +65,51 @@
   ],
   "checks": [
     {
-      "id": "inspect", "points": 15, "type": "log", "tag": "ipconfig", "when": "before_first_change",
+      "id": "inspect",
+      "points": 15,
+      "type": "log",
+      "tag": "ipconfig",
+      "when": "before_first_change",
       "label": "Checked the adapter configuration before changing anything",
       "pass": "You ran ipconfig before touching any settings, so you knew the starting point.",
       "fail": "You changed settings without first running ipconfig. Gather information before you change anything, or you cannot tell what the original fault was."
     },
     {
-      "id": "test", "points": 15, "type": "log", "tag": "ping", "when": "before_first_change",
+      "id": "test",
+      "points": 15,
+      "type": "log",
+      "tag": "ping",
+      "when": "before_first_change",
       "label": "Tested connectivity before changing anything",
       "pass": "You used ping to see what was reachable before making a change.",
       "fail": "You did not test connectivity with ping before making a change. Testing local and outside addresses is what narrows this fault down to the gateway."
     },
     {
-      "id": "online", "points": 30, "type": "probe", "probe": "internet",
+      "id": "online",
+      "points": 30,
+      "type": "probe",
+      "probe": "internet",
       "label": "The PC can reach the internet",
       "pass": "The PC can now reach outside addresses and resolve names.",
       "fail": "The PC still cannot reach the internet. Its default gateway must be an address on its own network (192.168.10.x); it was set to 192.168.1.1."
     },
     {
-      "id": "standard", "points": 20, "type": "state", "path": "net.mode", "equals": "dhcp",
+      "id": "standard",
+      "points": 20,
+      "type": "state",
+      "path": "net.mode",
+      "equals": "dhcp",
       "label": "The adapter follows the site standard (DHCP)",
       "pass": "The adapter obtains its address automatically, as the site standard requires.",
       "fail": "The adapter is still set to a manual (static) address. Even with a corrected gateway, the ticket said every workstation must use DHCP."
     },
     {
-      "id": "verify", "points": 20, "type": "log", "tag": "ping:remote", "ok": true, "when": "after_last_change",
+      "id": "verify",
+      "points": 20,
+      "type": "log",
+      "tag": "ping:remote",
+      "ok": true,
+      "when": "after_last_change",
       "label": "Verified the fix with a successful test to an outside address",
       "pass": "After your last change you confirmed an outside address replies.",
       "fail": "You did not run a successful ping to an outside address after your last change. A fix is not finished until you have verified it."

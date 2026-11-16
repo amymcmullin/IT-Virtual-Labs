@@ -9,7 +9,8 @@
       var first = -1, last = -1;
       log.forEach(function (e, i) { if (e.type === 'change') { if (first === -1) first = i; last = i; } });
       return log.some(function (e, i) {
-        if (!e.tags || e.tags.indexOf(c.tag) === -1) return false;
+        var want = [].concat(c.tag);
+        if (!e.tags || !want.some(function (t) { return e.tags.indexOf(t) !== -1; })) return false;
         if (c.ok !== undefined && e.ok !== c.ok) return false;
         if (c.when === 'before_first_change') return first === -1 || i < first;
         if (c.when === 'after_last_change') return last !== -1 && i > last;

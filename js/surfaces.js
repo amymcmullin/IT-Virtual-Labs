@@ -32,12 +32,13 @@
         var a = (args[0] || '').toLowerCase(), n = ctx.state.net, e = Net.effective(ctx.state, ctx.world);
         if (a === '/release' || a === '/renew') {
           if (n.mode !== 'dhcp') return { text: 'The operation failed as no adapter is in the state permissible for\nthis operation.', tags: ['ipconfig-lease'], ok: false };
-          n.leased = (a === '/renew'); ctx.changed();
-          return { text: show(false), tags: ['ipconfig-lease'], ok: true };
+          var was = n.leased; n.leased = (a === '/renew'); ctx.changed();
+          return { text: show(false), tags: ['ipconfig-lease'], ok: true,
+                   change: was !== n.leased ? (n.leased ? 'Renewed the DHCP lease (ipconfig /renew)' : 'Released the DHCP lease (ipconfig /release)') : null };
         }
         if (a === '/flushdns') return { text: 'Windows IP Configuration\n\nSuccessfully flushed the DNS Resolver Cache.', tags: ['flushdns'], ok: true };
         if (a && a !== '/all') return { text: 'Error: unrecognized or incomplete command line.\n\nUSAGE:\n    ipconfig [/all | /release | /renew | /flushdns]', tags: [], ok: false };
-        return { text: show(a === '/all'), tags: ['ipconfig'], ok: true };
+        return { text: show(a === '/all'), tags: a === '/all' ? ['ipconfig', 'ipconfig:all'] : ['ipconfig'], ok: true };
 
         function show(all) {
           e = Net.effective(ctx.state, ctx.world);
@@ -68,13 +69,14 @@
         var t = args.filter(function (x) { return x[0] !== '-' && x[0] !== '/'; })[0];
         if (!t) return { text: 'Usage: ping target_name', tags: [], ok: false };
         var r = lookup(t);
-        if (r.fail) return { text: 'Ping request could not find host ' + t + '. Please check the name and try again.', tags: ['ping', 'ping:name'], ok: false };
+        if (r.fail) return { text: 'Ping request could not find host ' + t + '. Please check the name and try again.', tags: ['ping', 'ping:byname', 'name-test'], ok: false };
         var ok = Net.canReach(ctx.state, ctx.world, r.ip), me = Net.effective(ctx.state, ctx.world).ip;
         var head = 'Pinging ' + (r.name ? r.name + ' [' + r.ip + ']' : r.ip) + ' with 32 bytes of data:\n';
         var line = ok ? 'Reply from ' + r.ip + ': bytes=32 time' + (scope(r.ip) === 'local' ? '<1ms TTL=128' : '=18ms TTL=116')
                       : (Net.isLocal(ctx.state, ctx.world, r.ip) ? 'Reply from ' + me + ': Destination host unreachable.' : 'Request timed out.');
         var stats = '\n\nPing statistics for ' + r.ip + ':\n    Packets: Sent = 4, Received = ' + (ok ? 4 : 0) + ', Lost = ' + (ok ? '0 (0% loss),' : '4 (100% loss),');
-        return { text: head + [line, line, line, line].join('\n') + stats, tags: ['ping', 'ping:' + scope(r.ip)], ok: ok };
+        var tags = ['ping', 'ping:' + scope(r.ip)]; if (r.name) tags.push('ping:byname', 'name-test');
+        return { text: head + [line, line, line, line].join('\n') + stats, tags: tags, ok: ok };
       }
 
       function tracert(args) {
@@ -93,9 +95,9 @@
       function nslookup(args) {
         var t = args[0]; if (!t) return { text: 'Usage: nslookup name', tags: [], ok: false };
         var e = Net.effective(ctx.state, ctx.world), r = Net.resolve(ctx.state, ctx.world, t);
-        if (r.reason === 'noserver') return { text: 'DNS request timed out.\n    timeout was 2 seconds.\n*** Request to ' + (e.dns || 'UnKnown') + ' timed-out', tags: ['nslookup'], ok: false };
-        if (!r.ok) return { text: 'Server:  ' + e.dns + '\n\n*** ' + e.dns + " can't find " + t + ': Non-existent domain', tags: ['nslookup'], ok: false };
-        return { text: 'Server:  ' + e.dns + '\nAddress:  ' + e.dns + '\n\nName:    ' + t + '\nAddress:  ' + r.ip, tags: ['nslookup'], ok: true };
+        if (r.reason === 'noserver') return { text: 'DNS request timed out.\n    timeout was 2 seconds.\n*** Request to ' + (e.dns || 'UnKnown') + ' timed-out', tags: ['nslookup', 'name-test'], ok: false };
+        if (!r.ok) return { text: 'Server:  ' + e.dns + '\n\n*** ' + e.dns + " can't find " + t + ': Non-existent domain', tags: ['nslookup', 'name-test'], ok: false };
+        return { text: 'Server:  ' + e.dns + '\nAddress:  ' + e.dns + '\n\nName:    ' + t + '\nAddress:  ' + r.ip, tags: ['nslookup', 'name-test'], ok: true };
       }
 
       var commands = {
@@ -117,6 +119,7 @@
         var res = fn ? fn(parts.slice(1)) : { text: "'" + parts[0] + "' is not recognized as an internal or external command,\noperable program or batch file.", tags: ['unknown'], ok: false };
         print(res.text + '\n');
         ctx.log({ type: 'cmd', text: raw, tags: res.tags, ok: res.ok });
+        if (res.change) ctx.log({ type: 'change', text: res.change, tags: ['lease'] });
       });
       input.addEventListener('keydown', function (ev) {
         if (ev.key === 'ArrowUp' && hpos > 0) { hpos--; input.value = history[hpos]; ev.preventDefault(); }
@@ -133,22 +136,24 @@
       var n = ctx.state.net;
       var form = el('form', { 'class': 'settings', novalidate: '' });
       form.appendChild(el('h3', {}, 'Ethernet adapter — IPv4 properties'));
-      var fs = el('fieldset'); fs.appendChild(el('legend', {}, 'IP assignment'));
-      function radio(val, label) {
-        var w = el('label', { 'class': 'radio' }), r = el('input', { type: 'radio', name: 'mode', value: val });
-        w.appendChild(r); w.appendChild(document.createTextNode(' ' + label)); fs.appendChild(w); return r;
+      function group(legend, name, opts) {
+        var fs = el('fieldset'), rs = {}; fs.appendChild(el('legend', {}, legend));
+        opts.forEach(function (o) { var w = el('label', { 'class': 'radio' }), r = el('input', { type: 'radio', name: name, value: o[0] });
+          w.appendChild(r); w.appendChild(document.createTextNode(' ' + o[1])); fs.appendChild(w); rs[o[0]] = r; });
+        form.appendChild(fs); return { fs: fs, r: rs };
       }
-      var rDhcp = radio('dhcp', 'Obtain an IP address automatically (DHCP)');
-      var rStatic = radio('static', 'Use the following IP address');
-      form.appendChild(fs);
-      var grid = el('div', { 'class': 'fields' }), inputs = {};
-      [['ip', 'IP address'], ['mask', 'Subnet mask'], ['gateway', 'Default gateway'], ['dns', 'Preferred DNS server']].forEach(function (f) {
-        var id = 'net-' + f[0];
-        grid.appendChild(el('label', { 'for': id }, f[1]));
-        inputs[f[0]] = el('input', { id: id, type: 'text', inputmode: 'decimal', autocomplete: 'off' });
-        grid.appendChild(inputs[f[0]]);
-      });
-      form.appendChild(grid);
+      function fields(parent, list) {
+        var grid = el('div', { 'class': 'fields' });
+        list.forEach(function (f) { var id = 'net-' + f[0]; grid.appendChild(el('label', { 'for': id }, f[1]));
+          inputs[f[0]] = el('input', { id: id, type: 'text', inputmode: 'decimal', autocomplete: 'off' }); grid.appendChild(inputs[f[0]]); });
+        parent.appendChild(grid);
+      }
+      var inputs = {};
+      var ipG = group('IP assignment', 'mode', [['dhcp', 'Obtain an IP address automatically (DHCP)'], ['static', 'Use the following IP address']]);
+      fields(ipG.fs, [['ip', 'IP address'], ['mask', 'Subnet mask'], ['gateway', 'Default gateway']]);
+      var dnsG = group('DNS server assignment', 'dnsmode', [['auto', 'Obtain DNS server address automatically'], ['manual', 'Use the following DNS server address']]);
+      fields(dnsG.fs, [['dns', 'Preferred DNS server']]);
+      var rDhcp = ipG.r.dhcp, rStatic = ipG.r['static'], rAuto = dnsG.r.auto, rManual = dnsG.r.manual;
       var msg = el('p', { 'class': 'settings-msg', role: 'status', 'aria-live': 'polite' });
       var row = el('div', { 'class': 'btn-row' });
       row.appendChild(el('button', { type: 'submit', 'class': 'primary' }, 'Apply'));
@@ -157,30 +162,35 @@
 
       function load() {
         rDhcp.checked = n.mode === 'dhcp'; rStatic.checked = n.mode === 'static';
+        var dm = Net.dnsMode(ctx.state); rAuto.checked = dm === 'auto'; rManual.checked = dm === 'manual';
         for (var k in inputs) inputs[k].value = n.static[k] || '';
         sync();
       }
-      function sync() { for (var k in inputs) inputs[k].disabled = rDhcp.checked; }
-      rDhcp.addEventListener('change', sync); rStatic.addEventListener('change', sync);
+      function sync() {
+        if (rStatic.checked) rManual.checked = true;          // a static IP cannot use an automatic DNS server
+        rAuto.disabled = rStatic.checked;
+        ['ip', 'mask', 'gateway'].forEach(function (k) { inputs[k].disabled = rDhcp.checked; });
+        inputs.dns.disabled = rAuto.checked;
+      }
+      [rDhcp, rStatic, rAuto, rManual].forEach(function (r) { r.addEventListener('change', sync); });
       cancel.addEventListener('click', function () { load(); msg.textContent = 'Form reset to the current settings.'; });
       form.addEventListener('submit', function (ev) {
         ev.preventDefault();
-        if (rDhcp.checked) {
-          if (n.mode === 'dhcp') { msg.textContent = 'No change: the adapter is already set to DHCP.'; return; }
-          n.mode = 'dhcp'; n.leased = true;
-          ctx.log({ type: 'change', text: 'Network Settings: set adapter to obtain an address automatically (DHCP)', tags: ['set:dhcp'] });
-          msg.textContent = 'Applied. The adapter now obtains its address automatically.';
-        } else {
-          var v = {}; for (var k in inputs) v[k] = inputs[k].value.trim();
-          var bad = Net.ipToInt(v.ip) === null ? 'IP address' : !Net.validMask(v.mask) ? 'Subnet mask'
-                  : (v.gateway && Net.ipToInt(v.gateway) === null) ? 'Default gateway' : (v.dns && Net.ipToInt(v.dns) === null) ? 'DNS server' : '';
-          if (bad) { msg.textContent = 'Not applied: the ' + bad + ' is not valid.'; return; }
-          var same = n.mode === 'static' && ['ip', 'mask', 'gateway', 'dns'].every(function (k) { return n.static[k] === v[k]; });
-          if (same) { msg.textContent = 'No change: those are the current settings.'; return; }
-          n.mode = 'static'; n.static = v;
-          ctx.log({ type: 'change', text: 'Network Settings: static IP ' + v.ip + ', mask ' + v.mask + ', gateway ' + (v.gateway || '(none)') + ', DNS ' + (v.dns || '(none)'), tags: ['set:static'] });
-          msg.textContent = 'Applied. The adapter is using the manual settings.';
-        }
+        var mode = rDhcp.checked ? 'dhcp' : 'static', dm = rAuto.checked ? 'auto' : 'manual', v = {};
+        for (var k in inputs) v[k] = inputs[k].value.trim();
+        var bad = '';
+        if (mode === 'static') bad = Net.ipToInt(v.ip) === null ? 'IP address' : !Net.validMask(v.mask) ? 'Subnet mask' : (v.gateway && Net.ipToInt(v.gateway) === null) ? 'Default gateway' : '';
+        if (!bad && dm === 'manual' && Net.ipToInt(v.dns) === null) bad = 'DNS server';
+        if (bad) { msg.textContent = 'Not applied: the ' + bad + ' is not valid.'; return; }
+        var next = { ip: mode === 'static' ? v.ip : n.static.ip, mask: mode === 'static' ? v.mask : n.static.mask, gateway: mode === 'static' ? v.gateway : n.static.gateway, dns: dm === 'manual' ? v.dns : n.static.dns };
+        var same = mode === n.mode && dm === Net.dnsMode(ctx.state) && ['ip', 'mask', 'gateway', 'dns'].every(function (k) { return (n.static[k] || '') === (next[k] || ''); });
+        if (same) { msg.textContent = 'No change: those are the current settings.'; return; }
+        var wasMode = n.mode;
+        n.mode = mode; n.dnsMode = dm; n.static = next; if (mode === 'dhcp' && wasMode !== 'dhcp') n.leased = true;
+        var ipTxt = mode === 'dhcp' ? 'IP automatic (DHCP)' : 'static IP ' + v.ip + ', mask ' + v.mask + ', gateway ' + (v.gateway || '(none)');
+        var dnsTxt = dm === 'auto' ? 'DNS automatic' : 'DNS ' + v.dns;
+        ctx.log({ type: 'change', text: 'Network Settings: ' + ipTxt + '; ' + dnsTxt, tags: ['set:' + mode, 'dns:' + dm] });
+        msg.textContent = 'Applied.';
         ctx.changed();
       });
       load();

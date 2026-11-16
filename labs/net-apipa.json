@@ -1,0 +1,107 @@
+{
+  "id": "net-apipa",
+  "version": 1,
+  "title": "Conference room laptop has no network",
+  "scenario": "Ticket #4502 \u2014 The laptop in the conference room (CONF-LT-01) shows a network icon with a warning and cannot reach anything, not even the shared drive. It was plugged in during this morning's network maintenance, which has since finished. Site standard: every workstation gets its address automatically from the office DHCP server.",
+  "tasks": [
+    "Look at the address the laptop is using and decide what it tells you.",
+    "Get the laptop a proper address without breaking the site standard.",
+    "Prove the laptop can reach the internet before you close the ticket."
+  ],
+  "surfaces": [
+    "terminal",
+    "netsettings"
+  ],
+  "initialState": {
+    "hostname": "CONF-LT-01",
+    "user": "labtech",
+    "net": {
+      "mode": "dhcp",
+      "leased": false,
+      "dnsMode": "auto",
+      "static": {
+        "ip": "",
+        "mask": "",
+        "gateway": "",
+        "dns": ""
+      }
+    }
+  },
+  "world": {
+    "mask": "255.255.255.0",
+    "gateway": "192.168.10.1",
+    "dnsServers": [
+      "192.168.10.10"
+    ],
+    "dhcp": {
+      "ip": "192.168.10.112",
+      "mask": "255.255.255.0",
+      "gateway": "192.168.10.1",
+      "dns": "192.168.10.10",
+      "server": "192.168.10.1"
+    },
+    "localHosts": [
+      "192.168.10.1",
+      "192.168.10.10",
+      "192.168.10.20"
+    ],
+    "remoteHosts": [
+      "8.8.8.8",
+      "1.1.1.1",
+      "203.0.113.80"
+    ],
+    "names": {
+      "fileserver": "192.168.10.20",
+      "www.example.com": "203.0.113.80"
+    }
+  },
+  "hints": [
+    "Run ipconfig and read the IPv4 line carefully. Is that an address the office would hand out?",
+    "An address starting with 169.254 is one the computer gave itself because it never heard back from a DHCP server.",
+    "Maintenance is over, so the DHCP server is available again. The laptop just needs to ask again.",
+    "ipconfig has switches for giving up and requesting an address. Type ipconfig /? or try ipconfig /renew.",
+    "After the renew, ping an outside address such as 8.8.8.8 to prove it worked."
+  ],
+  "checks": [
+    {
+      "id": "inspect",
+      "points": 20,
+      "type": "log",
+      "tag": "ipconfig",
+      "when": "before_first_change",
+      "label": "Checked the laptop's address before changing anything",
+      "pass": "You ran ipconfig first and saw the 169.254 address.",
+      "fail": "You made a change before running ipconfig. The 169.254 address is the clue that explains this whole ticket."
+    },
+    {
+      "id": "online",
+      "points": 40,
+      "type": "probe",
+      "probe": "internet",
+      "label": "The laptop can reach the internet",
+      "pass": "The laptop has a working address and can reach outside sites.",
+      "fail": "The laptop still cannot reach the internet. A 169.254 (APIPA) address means no DHCP lease; it needs to request one with ipconfig /renew."
+    },
+    {
+      "id": "standard",
+      "points": 15,
+      "type": "state",
+      "path": "net.mode",
+      "equals": "dhcp",
+      "label": "The adapter still follows the site standard (DHCP)",
+      "pass": "You left the adapter on DHCP, as the site standard requires.",
+      "fail": "You gave the laptop a manual address. It may work today, but it breaks the site standard and can cause an address conflict later."
+    },
+    {
+      "id": "verify",
+      "points": 25,
+      "type": "log",
+      "tag": "ping:remote",
+      "ok": true,
+      "when": "after_last_change",
+      "label": "Verified the fix with a successful test to an outside address",
+      "pass": "After your last change you confirmed an outside address replies.",
+      "fail": "You did not run a successful ping to an outside address after your last change. A fix is not finished until you have verified it."
+    }
+  ]
+}

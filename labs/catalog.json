@@ -2,21 +2,99 @@
   "site": "https://amymcmullin.github.io/IT-Virtual-Labs/",
   "labs": [
     {
+      "id": "net-apipa",
+      "title": "Conference room laptop has no network",
+      "summary": "A laptop gave itself a 169.254 address. Recognize what that means, get it a real one and verify.",
+      "minutes": 8,
+      "level": "Foundation",
+      "surfaces": [
+        "Command Prompt",
+        "Network Settings"
+      ],
+      "objectives": {
+        "A+ Core 1 (220-1201)": [
+          "5.5"
+        ],
+        "A+ Core 2 (220-1202)": [
+          "1.5",
+          "1.7"
+        ],
+        "CCST IT Support": [
+          "3.3"
+        ],
+        "Tech+ (FC0-U71)": [
+          "1.4",
+          "2.8"
+        ]
+      }
+    },
+    {
       "id": "net-no-internet",
       "title": "Front office PC can't get online",
       "summary": "One workstation reaches the shared drive but not the internet. Diagnose it from the command line, fix the adapter and verify.",
       "minutes": 10,
-      "level": "Foundation",
-      "surfaces": ["Command Prompt", "Network Settings"],
+      "level": "Support",
+      "surfaces": [
+        "Command Prompt",
+        "Network Settings"
+      ],
       "objectives": {
-        "A+ Core 1 (220-1201)": ["5.5"],
-        "A+ Core 2 (220-1202)": ["1.5", "1.7"],
-        "CCST IT Support": ["1.3", "3.3"],
-        "Tech+ (FC0-U71)": ["1.4", "2.8"]
+        "A+ Core 1 (220-1201)": [
+          "5.5"
+        ],
+        "A+ Core 2 (220-1202)": [
+          "1.5",
+          "1.7"
+        ],
+        "CCST IT Support": [
+          "1.3",
+          "3.3"
+        ],
+        "Tech+ (FC0-U71)": [
+          "1.4",
+          "2.8"
+        ]
+      }
+    },
+    {
+      "id": "net-dns",
+      "title": "Websites won't load by name",
+      "summary": "Addresses work but names do not. Prove it is DNS, fix the setting and verify.",
+      "minutes": 12,
+      "level": "Support",
+      "surfaces": [
+        "Command Prompt",
+        "Network Settings"
+      ],
+      "objectives": {
+        "A+ Core 1 (220-1201)": [
+          "2.3",
+          "2.4",
+          "5.5"
+        ],
+        "A+ Core 2 (220-1202)": [
+          "1.5",
+          "1.7"
+        ],
+        "CCST IT Support": [
+          "1.3",
+          "3.3"
+        ],
+        "Tech+ (FC0-U71)": [
+          "1.4",
+          "2.8"
+        ]
       }
     }
   ],
   "sets": {
-    "poc": { "title": "Proof of concept", "labs": ["net-no-internet"] }
+    "network-basics": {
+      "title": "Network troubleshooting basics",
+      "labs": [
+        "net-apipa",
+        "net-no-internet",
+        "net-dns"
+      ]
+    }
   }
 }

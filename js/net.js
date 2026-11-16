@@ -15,12 +15,15 @@
     if (x === null || y === null || m === null) return false;
     return ((x & m) >>> 0) === ((y & m) >>> 0);
   }
+  /* A static IP always uses a manual DNS server; with DHCP the DNS server can be automatic or manual. */
+  function dnsMode(state) { var n = state.net; return n.mode === 'static' ? 'manual' : (n.dnsMode || 'auto'); }
   /* The addressing the adapter is actually using right now. */
   function effective(state, world) {
     var n = state.net;
+    var manualDns = dnsMode(state) === 'manual';
     if (n.mode === 'static') return { ip: n.static.ip, mask: n.static.mask, gateway: n.static.gateway, dns: n.static.dns, dhcp: false };
-    if (n.leased) return { ip: world.dhcp.ip, mask: world.dhcp.mask, gateway: world.dhcp.gateway, dns: world.dhcp.dns, dhcp: true, server: world.dhcp.server };
-    return { ip: '169.254.37.201', mask: '255.255.0.0', gateway: '', dns: '', dhcp: true, apipa: true };
+    if (n.leased) return { ip: world.dhcp.ip, mask: world.dhcp.mask, gateway: world.dhcp.gateway, dns: manualDns ? n.static.dns : world.dhcp.dns, dhcp: true, server: world.dhcp.server };
+    return { ip: '169.254.37.201', mask: '255.255.0.0', gateway: '', dns: manualDns ? n.static.dns : '', dhcp: true, apipa: true };
   }
   function onRealNetwork(eff, world) {
     return eff.mask === world.mask && sameSubnet(eff.ip, world.gateway, world.mask);
@@ -44,11 +47,12 @@
     return ip ? { ok: true, ip: ip } : { ok: false, reason: 'nxdomain' };
   }
   var probes = {
+    dns: function (state, world) { var r = resolve(state, world, 'www.example.com'); return r.ok && canReach(state, world, r.ip); },
     internet: function (state, world) {
       var r = resolve(state, world, 'www.example.com');
       return canReach(state, world, world.remoteHosts[0]) && r.ok && canReach(state, world, r.ip);
     }
   };
-  var Net = { ipToInt: ipToInt, validMask: validMask, sameSubnet: sameSubnet, effective: effective, canReach: canReach, isLocal: isLocal, resolve: resolve, probes: probes };
+  var Net = { ipToInt: ipToInt, validMask: validMask, sameSubnet: sameSubnet, effective: effective, dnsMode: dnsMode, canReach: canReach, isLocal: isLocal, resolve: resolve, probes: probes };
   if (typeof module !== 'undefined' && module.exports) module.exports = Net; else root.Net = Net;
 })(this);
