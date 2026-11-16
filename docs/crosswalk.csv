@@ -1,39 +1,39 @@
-Topic cluster,Tier (first taught),Tech+ FC0-U71,CCST IT Support,A+ Core 1 220-1201,A+ Core 2 220-1202,Lab fit,Surfaces needed,Notes
-Troubleshooting method and ticket documentation,1 Foundation,1.4,"1.2, 1.3",,4.1,Built into every lab,(report + timeline),Every lab scores 'gather information before changing' and 'verify the fix'; A+ best-practice methodology is 18% in class data
-"Help desk concepts: queues, SLAs, KPIs, escalation",2 Support,,1.1,,4.1,Knowledge,,
-Professional communication with users,2 Support,,"(expected, not a numbered objective)",,4.7,Partial,Ticket chat,
-"Safety, ESD and environmental handling",2 Support,,2.1,,"4.4, 4.5",Partial,Workbench,
-"Ports, cables, connectors and cable tools",1 Foundation,2.5,2.3,"2.8, 3.2",,Strong,Workbench (back panel),
-"Internal components: motherboard, CPU, RAM, power",1 Foundation,2.2,2.4,"3.3, 3.5, 3.6",,Strong,Workbench (inside case),
-Storage devices and drive problems,1 Foundation,2.3,2.4,"3.4, 5.2",,Strong,"Workbench, Disk tool",
-Peripherals and printers,1 Foundation,2.4,3.2,"3.7, 3.8, 5.6",,Strong,Devices and Printers,Printer troubleshooting 33% on A+; CCST 3.2 at 66%
-Displays and display settings,2 Support,2.5,"3.2, 4.1","3.1, 5.3",1.6,Strong,"Display settings, Workbench",
-"Hardware faults: no power, POST, overheating, firmware",2 Support,1.4,2.5,5.1,,Strong,"Workbench, Firmware setup",A+ motherboard/RAM/CPU/power troubleshooting 40%; CCST 2.5 at 65%
-Finding device information with OS tools,2 Support,3.1,2.2,,1.4,Strong,"System info, Task Manager, Command Prompt",
-Device Manager and drivers,2 Support,,"2.4, 2.5",,1.4,Strong,Device Manager,
-"Mobile devices: setup, connectivity, common issues",2 Support,2.1,4.3,"1.1, 1.2, 1.3, 5.4","2.8, 3.2, 3.3",Partial,Phone settings,
-"IP addressing, DNS, DHCP and gateway basics",1 Foundation,2.8,3.3,"2.1, 2.3, 2.4, 2.5",1.7,Strong,"Command Prompt, Network Settings",LABS BUILT; A+ network configuration concepts 37%
-Network command-line tools and connectivity faults,2 Support,,3.3,5.5,"1.5, 1.7",Strong,"Command Prompt, Network Settings",LABS BUILT
-Small wireless network setup and security,1 Foundation,"2.9, 6.5",3.3,"2.2, 2.6","2.3, 2.10",Strong,Router admin page,
-Internet connection and network types,1 Foundation,2.7,,2.7,,Knowledge,,
-Virtualization and cloud concepts,1 Foundation,2.6,4.4,"4.1, 4.2",1.11,Partial,Hypervisor manager,CCST 4.4 is the weakest CCST objective (60%)
-"Operating system types, purpose and components",1 Foundation,"3.1, 3.2",,,"1.1, 1.3",Knowledge,,
-Windows settings and administrative tools,2 Support,3.1,4.1,,"1.4, 1.6",Strong,"Settings, Task Manager",
-"Windows problems: boot, safe mode, slow PC, updates",2 Support,,4.1,,3.1,Strong,"Task Manager, Boot options",
-macOS features and support,2 Support,,4.2,,1.8,Partial,macOS-style settings,
-Linux client commands,3 Technician,,3.3,,1.9,Strong,Linux terminal,
-Installing operating systems and applications,2 Support,3.3,4.5,,"1.2, 1.10",Partial,"Installer, System info",App installation 28% on A+ Core 2 (3 students)
-Browser configuration and security,1 Foundation,3.4,"4.1, 4.2",,2.11,Strong,Browser settings,
-"Accounts, groups, permissions, shares and MFA",2 Support,6.1,3.1,,"1.7, 2.1, 2.2",Strong,"Users and Groups, File sharing, Command Prompt",CCST 3.1 at 65%; ITS Device Config file sharing 58%
-"Malware, threats and social engineering",1 Foundation,6.2,"5.1, 5.2",,"2.4, 2.5, 2.6, 3.4",Partial,"Security scanner, Email inbox",Malware removal procedure 22% on A+ Core 2 (3 students)
-Workstation hardening and passwords,1 Foundation,"6.2, 6.3",5.1,,"2.2, 2.7",Strong,Security settings,
-Encryption and BitLocker,2 Support,6.4,4.1,,2.2,Partial,Security settings,
-"Privacy, PII, licensing and policy",1 Foundation,"6.1, 6.2",5.3,,4.6,Knowledge,,
-Backup and recovery,1 Foundation,5.4,"4.1, 4.2",,4.3,Partial,Backup tool,
-Remote access tools,2 Support,,6.1,,4.9,Partial,Remote session,
-Artificial intelligence: uses and limits,1 Foundation,3.5,6.2,,4.10,Knowledge,,
-Scripting and programming concepts,1 Foundation,"4.1, 4.2, 4.3, 4.4",,,4.8,Partial,Script editor,
-Data destruction and e-waste,3 Technician,,2.4,,2.9,Knowledge,,
-Change management,3 Technician,,,,4.2,Knowledge,,
-"Notational systems, units and computing basics",1 Foundation,"1.1, 1.2, 1.3",,,,Knowledge,,Tech+ only
-Data and database fundamentals,1 Foundation,"5.1, 5.2, 5.3",,,,Knowledge,,Tech+ only
+Topic cluster,Tier (first taught),Tech+ FC0-U71,CCST IT Support,A+ Core 1 220-1201,A+ Core 2 220-1202,Lab fit,Surfaces needed
+Troubleshooting method and ticket documentation,1 Foundation,1.4,"1.2, 1.3",,4.1,Built into every lab,(report + timeline)
+"Help desk concepts: queues, SLAs, KPIs, escalation",2 Support,,1.1,,4.1,Knowledge,
+Professional communication with users,2 Support,,"(expected, not a numbered objective)",,4.7,Partial,Ticket chat
+"Safety, ESD and environmental handling",2 Support,,2.1,,"4.4, 4.5",Partial,Workbench
+"Ports, cables, connectors and cable tools",1 Foundation,2.5,2.3,"2.8, 3.2",,Strong,Workbench (back panel)
+"Internal components: motherboard, CPU, RAM, power",1 Foundation,2.2,2.4,"3.3, 3.5, 3.6",,Strong,Workbench (inside case)
+Storage devices and drive problems,1 Foundation,2.3,2.4,"3.4, 5.2",,Strong,"Workbench, Disk tool"
+Peripherals and printers,1 Foundation,2.4,3.2,"3.7, 3.8, 5.6",,Strong,Devices and Printers
+Displays and display settings,2 Support,2.5,"3.2, 4.1","3.1, 5.3",1.6,Strong,"Display settings, Workbench"
+"Hardware faults: no power, POST, overheating, firmware",2 Support,1.4,2.5,5.1,,Strong,"Workbench, Firmware setup"
+Finding device information with OS tools,2 Support,3.1,2.2,,1.4,Strong,"System info, Task Manager, Command Prompt"
+Device Manager and drivers,2 Support,,"2.4, 2.5",,1.4,Strong,Device Manager
+"Mobile devices: setup, connectivity, common issues",2 Support,2.1,4.3,"1.1, 1.2, 1.3, 5.4","2.8, 3.2, 3.3",Partial,Phone settings
+"IP addressing, DNS, DHCP and gateway basics",1 Foundation,2.8,3.3,"2.1, 2.3, 2.4, 2.5",1.7,Strong,"Command Prompt, Network Settings"
+Network command-line tools and connectivity faults,2 Support,,3.3,5.5,"1.5, 1.7",Strong,"Command Prompt, Network Settings"
+Small wireless network setup and security,1 Foundation,"2.9, 6.5",3.3,"2.2, 2.6","2.3, 2.10",Strong,Router admin page
+Internet connection and network types,1 Foundation,2.7,,2.7,,Knowledge,
+Virtualization and cloud concepts,1 Foundation,2.6,4.4,"4.1, 4.2",1.11,Partial,Hypervisor manager
+"Operating system types, purpose and components",1 Foundation,"3.1, 3.2",,,"1.1, 1.3",Knowledge,
+Windows settings and administrative tools,2 Support,3.1,4.1,,"1.4, 1.6",Strong,"Settings, Task Manager"
+"Windows problems: boot, safe mode, slow PC, updates",2 Support,,4.1,,3.1,Strong,"Task Manager, Boot options"
+macOS features and support,2 Support,,4.2,,1.8,Partial,macOS-style settings
+Linux client commands,3 Technician,,3.3,,1.9,Strong,Linux terminal
+Installing operating systems and applications,2 Support,3.3,4.5,,"1.2, 1.10",Partial,"Installer, System info"
+Browser configuration and security,1 Foundation,3.4,"4.1, 4.2",,2.11,Strong,Browser settings
+"Accounts, groups, permissions, shares and MFA",2 Support,6.1,3.1,,"1.7, 2.1, 2.2",Strong,"Users and Groups, File sharing, Command Prompt"
+"Malware, threats and social engineering",1 Foundation,6.2,"5.1, 5.2",,"2.4, 2.5, 2.6, 3.4",Partial,"Security scanner, Email inbox"
+Workstation hardening and passwords,1 Foundation,"6.2, 6.3",5.1,,"2.2, 2.7",Strong,Security settings
+Encryption and BitLocker,2 Support,6.4,4.1,,2.2,Partial,Security settings
+"Privacy, PII, licensing and policy",1 Foundation,"6.1, 6.2",5.3,,4.6,Knowledge,
+Backup and recovery,1 Foundation,5.4,"4.1, 4.2",,4.3,Partial,Backup tool
+Remote access tools,2 Support,,6.1,,4.9,Partial,Remote session
+Artificial intelligence: uses and limits,1 Foundation,3.5,6.2,,4.10,Knowledge,
+Scripting and programming concepts,1 Foundation,"4.1, 4.2, 4.3, 4.4",,,4.8,Partial,Script editor
+Data destruction and e-waste,3 Technician,,2.4,,2.9,Knowledge,
+Change management,3 Technician,,,,4.2,Knowledge,
+"Notational systems, units and computing basics",1 Foundation,"1.1, 1.2, 1.3",,,,Knowledge,
+Data and database fundamentals,1 Foundation,"5.1, 5.2, 5.3",,,,Knowledge,
