@@ -1,14 +1,14 @@
 Build order,Lab,Tier,Tech+ FC0-U71,CCST IT Support,A+ Core 1 220-1201,A+ Core 2 220-1202,Surfaces used,New surface to build,Why here
-1,Front office PC can't get online (wrong gateway),2 Support,"1.4, 2.8","1.3, 3.3",5.5,"1.5, 1.7","Command Prompt, Network Settings",Built,Proof of concept
-2,Laptop has a 169.254 address (no DHCP lease),1 Foundation,2.8,3.3,5.5,"1.5, 1.7","Command Prompt, Network Settings",None (reuse),"Cheap second lab; proves labs are data, not code"
-3,Sites fail by name but work by IP (DNS setting),2 Support,2.8,3.3,"2.3, 2.4","1.5, 1.7","Command Prompt, Network Settings",None (reuse),Completes a three-lab network set at rising difficulty
-4,User can't open the department share,2 Support,6.1,3.1,,"1.5, 1.7, 2.2","Users and Groups, File sharing, Command Prompt","Users and Groups, File sharing",CCST 3.1 weak spot
-5,Build the workstation: connect the right cables,1 Foundation,"2.4, 2.5",2.3,3.2,,Workbench (back panel),Workbench,First 2D bench lab; shared by all three paths
-6,PC won't start after a RAM upgrade,2 Support,2.2,"2.4, 2.5","3.3, 3.5, 5.1",,Workbench (inside case),None after lab 5,CCST 2.5 weak spot
-7,Nothing prints: stuck queue and offline printer,2 Support,2.4,3.2,"3.7, 5.6",,Devices and Printers,Devices and Printers,CCST 3.2 weak spot
-8,Create a virtual machine that meets the request,2 Support,2.6,4.4,4.1,,Hypervisor manager,Hypervisor manager,CCST 4.4 is the weakest class objective
-9,The app won't install: check requirements and source,2 Support,3.3,"4.5, 2.2",,1.10,"System info, Installer","System info, Installer",CCST 4.5 weak spot
-10,Suspicious pop-ups: work the malware removal steps,2 Support,6.2,5.1,,"2.4, 2.6, 3.4","Security scanner, Task Manager","Security scanner, Task Manager",CCST 5.1 weak spot
-11,Slow PC: find the runaway process and startup apps,2 Support,3.1,4.1,,"1.4, 3.1",Task Manager,None after lab 10,
-12,Secure the new office wireless router,1 Foundation,"2.9, 6.5",3.3,2.6,"2.3, 2.10",Router admin page,Router admin page,Tech+ scenario objective
-13,Yellow warning in Device Manager: fix the driver,2 Support,,"2.4, 2.5",,1.4,Device Manager,Device Manager,
+1,Conference room laptop has no network (169.254 address),1 Foundation,"1.4, 2.8",3.3,5.5,"1.5, 1.7","Command Prompt, Network Settings",Built,A+ Core 1 networking objectives sit at 37-39% in class data
+2,Front office PC can't get online (wrong gateway),2 Support,"1.4, 2.8","1.3, 3.3",5.5,"1.5, 1.7","Command Prompt, Network Settings",Built,Proof of concept
+3,Websites won't load by name (DNS setting),2 Support,"1.4, 2.8","1.3, 3.3","2.3, 2.4, 5.5","1.5, 1.7","Command Prompt, Network Settings",Built,Network host services 38% and configuration concepts 37% on A+ Core 1
+4,Build the workstation: connect the right cables,1 Foundation,"2.4, 2.5",2.3,3.2,,Workbench (back panel),Workbench,First 2D bench lab; installing common devices is 31% on A+ Core 1
+5,Upgrade the RAM and pick the right power supply,2 Support,2.2,"2.4, 2.5","3.3, 3.5, 3.6, 5.1",,Workbench (inside case),None after lab 4,RAM 33% and power supplies 11% are the lowest hands-on A+ topics
+6,Nothing prints: stuck queue and offline printer,2 Support,2.4,3.2,"3.7, 5.6",,Devices and Printers,Devices and Printers,Printer troubleshooting 33% on A+; CCST 3.2 at 66%
+7,User can't open the department share,2 Support,6.1,3.1,,"1.5, 1.7, 2.2","Users and Groups, File sharing, Command Prompt","Users and Groups, File sharing",CCST 3.1 at 65%; ITS Device Config file sharing at 58%
+8,Secure the new office wireless router,1 Foundation,"2.9, 6.5",3.3,"2.2, 2.6","2.3, 2.10",Router admin page,Router admin page,SOHO network setup 39% on A+ Core 1
+9,Suspicious pop-ups: work the malware removal steps,2 Support,6.2,5.1,,"2.4, 2.6, 3.4","Security scanner, Task Manager","Security scanner, Task Manager",Malware removal procedure 22% on A+ Core 2 (3 students)
+10,Create a virtual machine that meets the request,2 Support,2.6,4.4,4.1,,Hypervisor manager,Hypervisor manager,CCST 4.4 is the weakest CCST objective (60%)
+11,The app won't install: check requirements and source,2 Support,3.3,"4.5, 2.2",,1.10,"System info, Installer","System info, Installer",App installation 28% on A+ Core 2 (3 students)
+12,Slow PC: find the runaway process and startup apps,2 Support,3.1,4.1,,"1.4, 3.1",Task Manager,None after lab 9,ITS Device Config OS troubleshooting at 57%
+13,Yellow warning in Device Manager: fix the driver,2 Support,,"2.4, 2.5",,1.4,Device Manager,Device Manager,ITS Device Config device troubleshooting at 54%
