@@ -133,6 +133,30 @@
           "2.2"
         ]
       }
+    },
+    {
+      "id": "print-stuck-queue",
+      "title": "Nothing prints at the front desk",
+      "summary": "A blocked print queue, an offline setting and the wrong default printer. Clear the block without losing other people's documents, then prove it prints.",
+      "minutes": 12,
+      "level": "Support",
+      "surfaces": [
+        "Printers",
+        "Services"
+      ],
+      "objectives": {
+        "A+ Core 1 (220-1201)": [
+          "5.6"
+        ],
+        "CCST IT Support": [
+          "1.3",
+          "3.2"
+        ],
+        "Tech+ (FC0-U71)": [
+          "1.4",
+          "2.4"
+        ]
+      }
     }
   ],
   "sets": {
@@ -149,6 +173,12 @@
       "labs": [
         "bench-cables",
         "bench-ram-psu"
+      ]
+    },
+    "peripherals": {
+      "title": "Printers and peripherals",
+      "labs": [
+        "print-stuck-queue"
       ]
     }
   }

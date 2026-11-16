@@ -1,0 +1,175 @@
+{
+  "id": "print-stuck-queue",
+  "version": 1,
+  "title": "Nothing prints at the front desk",
+  "scenario": "Ticket #4588 \u2014 Dana at the front desk (FRONT-OFFICE-03) says nothing she sends to the Front Office Laser comes out, and it has been that way since this morning. Two coworkers have documents they still need from that printer. The printer itself is powered on, has paper and shows no error on its panel, so the problem is on the PC. Dana prints to the Front Office Laser all day and should not have to pick it each time.",
+  "tasks": [
+    "Look at the printer's queue before you change anything.",
+    "Clear whatever is blocking the queue without throwing away the documents people still need.",
+    "Make sure the printer is usable and is the one Dana prints to by default.",
+    "Prove it with a test page before you close the ticket."
+  ],
+  "surfaces": [
+    "printers",
+    "services"
+  ],
+  "initialState": {
+    "print": {
+      "defaultPrinter": "pdf",
+      "cancelledGood": 0,
+      "printers": {
+        "fo": {
+          "name": "Front Office Laser",
+          "offline": true,
+          "paused": false,
+          "printed": 0,
+          "jobs": [
+            {
+              "doc": "Q3-Budget-FINAL-v7.xlsx",
+              "owner": "rgomez",
+              "pages": 214,
+              "status": "Error - Printing",
+              "bad": true
+            },
+            {
+              "doc": "Visitor badges.docx",
+              "owner": "dana",
+              "pages": 2,
+              "status": "Waiting"
+            },
+            {
+              "doc": "Delivery log.pdf",
+              "owner": "mlee",
+              "pages": 1,
+              "status": "Waiting"
+            }
+          ]
+        },
+        "pdf": {
+          "name": "Print to PDF",
+          "note": "saves a file instead of printing",
+          "offline": false,
+          "paused": false,
+          "printed": 0,
+          "jobs": []
+        },
+        "bo": {
+          "name": "Back Office Color",
+          "note": "in the locked back office",
+          "offline": false,
+          "paused": false,
+          "printed": 0,
+          "jobs": []
+        }
+      }
+    },
+    "services": {
+      "audio": {
+        "name": "Audio Service",
+        "desc": "Manages sound for programs",
+        "status": "running"
+      },
+      "dhcp": {
+        "name": "DHCP Client",
+        "desc": "Registers and updates the PC's IP address",
+        "status": "running"
+      },
+      "dns": {
+        "name": "DNS Client",
+        "desc": "Caches name lookups",
+        "status": "running"
+      },
+      "spooler": {
+        "name": "Print Spooler",
+        "desc": "Holds print jobs and sends them to printers",
+        "status": "running"
+      },
+      "update": {
+        "name": "Update Service",
+        "desc": "Downloads and installs updates",
+        "status": "running"
+      }
+    }
+  },
+  "world": {},
+  "hints": [
+    "Open the print queue for the Front Office Laser and read the Status column from the top. Printers work through documents in order.",
+    "One document at the top is in an error state, so everything behind it waits. Cancel that one document, not the whole queue.",
+    "A cancelled job that sits in 'Deleting' is stuck in the spooler. Which service holds print jobs? Restarting it clears the stuck job.",
+    "The queue window has two checkboxes. One of them makes the PC treat the printer as unavailable even though it is switched on.",
+    "Check which printer has the Default badge. Where have Dana's prints been going?",
+    "Finish with Print test page on the Front Office Laser."
+  ],
+  "checks": [
+    {
+      "id": "look",
+      "points": 10,
+      "type": "log",
+      "tag": "queue:open:fo",
+      "when": "before_first_change",
+      "label": "Opened the printer's queue before changing anything",
+      "pass": "You looked at the queue first and saw the errored document at the top.",
+      "fail": "You made a change before opening the Front Office Laser queue. The queue shows exactly what is blocking printing."
+    },
+    {
+      "id": "stuck",
+      "points": 20,
+      "type": "state",
+      "path": "print.printers.fo.jobs.length",
+      "equals": 0,
+      "label": "Cleared the blocked queue",
+      "pass": "The errored document is gone and nothing is left waiting.",
+      "fail": "The queue is still blocked. Cancel the errored document at the top; if it hangs in 'Deleting', restart the Print Spooler service, and make sure the printer is not offline or paused so the rest can print."
+    },
+    {
+      "id": "keep",
+      "points": 10,
+      "type": "state",
+      "path": "print.cancelledGood",
+      "equals": 0,
+      "label": "Kept the documents people were waiting for",
+      "pass": "You removed only the faulty document, so the two waiting documents printed.",
+      "fail": "You cancelled documents that were not at fault. Coworkers were waiting for those; cancel only the errored job, not the whole queue."
+    },
+    {
+      "id": "online",
+      "points": 15,
+      "type": "state",
+      "path": "print.printers.fo.offline",
+      "equals": false,
+      "label": "Printer is no longer set to 'Use printer offline'",
+      "pass": "The printer is online, so the PC sends jobs to it again.",
+      "fail": "'Use printer offline' is still turned on for the Front Office Laser, so the PC holds every job instead of sending it."
+    },
+    {
+      "id": "default",
+      "points": 15,
+      "type": "state",
+      "path": "print.defaultPrinter",
+      "equals": "fo",
+      "label": "Front Office Laser is the default printer",
+      "pass": "Dana's prints now go to the Front Office Laser without her choosing it.",
+      "fail": "The default printer is not the Front Office Laser. Dana's prints were being saved as PDF files, or would go to a printer she cannot reach."
+    },
+    {
+      "id": "spooler",
+      "points": 10,
+      "type": "state",
+      "path": "services.spooler.status",
+      "equals": "running",
+      "label": "Print Spooler service left running",
+      "pass": "The spooler is running.",
+      "fail": "The Print Spooler service is stopped. No printer on this PC works until it is started again."
+    },
+    {
+      "id": "verify",
+      "points": 20,
+      "type": "log",
+      "tag": "testpage-ok:fo",
+      "when": "after_last_change",
+      "label": "Printed a test page on the Front Office Laser after the last change",
+      "pass": "A test page printed after your final change, which proves the fix.",
+      "fail": "You did not print a successful test page on the Front Office Laser after your last change."
+    }
+  ]
+}

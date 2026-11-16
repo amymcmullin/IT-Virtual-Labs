@@ -141,3 +141,16 @@ tr.bad td { background: var(--miss-bg); }
 .bench-obs h4 { margin: .8rem 0 .3rem; }
 .bench-obs ul { margin: 0; padding-left: 1.2rem; }
 @media (max-width: 760px) { .pane-bench { grid-template-columns: 1fr; padding: .7rem; } .bench-panel { position: static; } }
+
+/* app-style tools (printers, services) */
+.pane-app { background: #fff; padding: 1.1rem; }
+.app-card { border: 1px solid var(--line); border-radius: 8px; padding: .8rem 1rem; margin: .6rem 0; }
+.app-card-head { display: flex; gap: .6rem; align-items: center; }
+.app-card p { margin: .2rem 0 0; }
+.app-card .btn-row, .btn-row.tight { margin-top: .6rem; gap: .4rem; }
+.btn-row.tight { margin-top: 0; flex-wrap: nowrap; }
+.btn-row.tight button { padding: .3rem .7rem; min-height: 36px; }
+.app-msg { min-height: 1.5rem; font-weight: 600; margin: .8rem 0; }
+.app-warn { background: var(--miss-bg); border-left: 4px solid var(--miss); padding: .6rem .9rem; border-radius: 4px; }
+.app-opts { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+.pane-app th[scope=row] { background: none; font-size: .92rem; }
