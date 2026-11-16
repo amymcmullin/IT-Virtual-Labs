@@ -1,0 +1,22 @@
+{
+  "site": "https://amymcmullin.github.io/IT-Virtual-Labs/",
+  "labs": [
+    {
+      "id": "net-no-internet",
+      "title": "Front office PC can't get online",
+      "summary": "One workstation reaches the shared drive but not the internet. Diagnose it from the command line, fix the adapter and verify.",
+      "minutes": 10,
+      "level": "Foundation",
+      "surfaces": ["Command Prompt", "Network Settings"],
+      "objectives": {
+        "A+ Core 1 (220-1201)": ["5.5"],
+        "A+ Core 2 (220-1202)": ["1.5", "1.7"],
+        "CCST IT Support": ["1.3", "3.3"],
+        "Tech+ (FC0-U71)": ["1.4", "2.8"]
+      }
+    }
+  ],
+  "sets": {
+    "poc": { "title": "Proof of concept", "labs": ["net-no-internet"] }
+  }
+}

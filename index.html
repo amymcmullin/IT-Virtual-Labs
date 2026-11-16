@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IT Virtual Labs</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/labs.css">
+</head>
+<body>
+<main class="page">
+  <p class="eyebrow">Immokalee Technical College · Computer Systems &amp; Information Technology</p>
+  <h1 id="heading">IT Virtual Labs</h1>
+  <p id="intro">Hands-on practice labs that run in your browser. Pick a lab, work the ticket, and get a step-by-step report of what you did well and what you missed.</p>
+  <div class="toolbar" id="toolbar">
+    <div><label for="exam">Show labs for</label>
+      <select id="exam"><option value="">All certifications</option></select></div>
+  </div>
+  <div id="list" aria-live="polite"></div>
+  <p class="muted"><a href="instructor.html">Instructor tools</a></p>
+</main>
+<script>
+(function () {
+  var qs = new URLSearchParams(location.search), setId = qs.get('set');
+  function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+  var best = {}; try { best = JSON.parse(localStorage.getItem('itvl-best')) || {}; } catch (e) {}
+  fetch('labs/catalog.json').then(function (r) { return r.json(); }).then(function (cat) {
+    var labs = cat.labs, set = setId && cat.sets[setId];
+    if (set) {
+      labs = set.labs.map(function (id) { return cat.labs.filter(function (l) { return l.id === id; })[0]; }).filter(Boolean);
+      document.getElementById('heading').textContent = set.title;
+      document.getElementById('intro').textContent = 'Your instructor assigned these labs.';
+    }
+    var exams = {}; labs.forEach(function (l) { Object.keys(l.objectives).forEach(function (e) { exams[e] = 1; }); });
+    var sel = document.getElementById('exam');
+    Object.keys(exams).sort().forEach(function (e) { var o = document.createElement('option'); o.textContent = e; o.value = e; sel.appendChild(o); });
+    function draw() {
+      var ex = sel.value, shown = labs.filter(function (l) { return !ex || l.objectives[ex]; });
+      document.getElementById('list').innerHTML = shown.map(function (l) {
+        var tags = Object.keys(l.objectives).filter(function (e) { return !ex || e === ex; }).map(function (e) { return '<li>' + esc(e) + ': ' + esc(l.objectives[e].join(', ')) + '</li>'; }).join('');
+        var b = [best[l.id + ':practice'] != null ? 'Practice best ' + best[l.id + ':practice'] + '%' : '', best[l.id + ':graded'] != null ? 'Graded best ' + best[l.id + ':graded'] + '%' : ''].filter(Boolean).join(' · ');
+        return '<article class="lab-card"><h2>' + esc(l.title) + '</h2><p>' + esc(l.summary) + '</p>' +
+          '<p class="muted">' + esc(l.level) + ' · about ' + l.minutes + ' minutes · ' + esc(l.surfaces.join(', ')) + (b ? ' · <strong>' + esc(b) + ' (this device)</strong>' : '') + '</p>' +
+          '<ul class="tags" aria-label="Exam objectives">' + tags + '</ul>' +
+          '<div class="btn-row"><a class="linkbtn primary" href="lab.html?lab=' + l.id + '&mode=practice">Practice</a><a class="linkbtn" href="lab.html?lab=' + l.id + '&mode=graded">Graded</a></div></article>';
+      }).join('') || '<p>No labs match that filter yet.</p>';
+    }
+    sel.addEventListener('change', draw); draw();
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Instructor tools — IT Virtual Labs</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/labs.css">
+</head>
+<body>
+<main class="page">
+  <p class="eyebrow">IT Virtual Labs</p>
+  <h1>Completion code decoder</h1>
+  <p>Paste one code or a whole class's submissions (any surrounding text is ignored). Everything is decoded in your browser; nothing is uploaded.</p>
+  <label for="codes">Completion codes</label>
+  <textarea id="codes" rows="7" spellcheck="false"></textarea>
+  <div class="btn-row">
+    <button id="go" type="button" class="primary">Decode</button>
+    <button id="csv" type="button" disabled>Download CSV</button>
+    <span id="status" role="status" class="muted"></span>
+  </div>
+  <div id="out"></div>
+  <p class="muted">A code that fails its check was altered or mistyped. The check is a deterrent, not proof: grading runs in the student's browser.</p>
+</main>
+<script src="js/grading.js"></script>
+<script>
+(function () {
+  var $ = function (id) { return document.getElementById(id); }, rows = [], labs = {};
+  function esc(s) { var d = document.createElement('div'); d.textContent = s == null ? '' : s; return d.innerHTML; }
+  function loadLab(id) {
+    if (labs[id]) return Promise.resolve(labs[id]);
+    return fetch('labs/' + String(id).replace(/[^a-z0-9-]/gi, '') + '.json').then(function (r) { return r.ok ? r.json() : null; }).catch(function () { return null; }).then(function (j) { labs[id] = j || { title: id, checks: [] }; return labs[id]; });
+  }
+  $('go').addEventListener('click', function () {
+    var found = $('codes').value.match(/ITVL1\.[A-Za-z0-9_-]+\.[a-z0-9]+/g) || [];
+    rows = found.map(Grading.readCode).filter(Boolean);
+    var ids = {}; rows.forEach(function (r) { ids[r.data.l] = 1; });
+    Promise.all(Object.keys(ids).map(loadLab)).then(function () { draw(Object.keys(ids)); });
+    $('status').textContent = rows.length + ' code' + (rows.length === 1 ? '' : 's') + ' decoded.';
+    $('csv').disabled = !rows.length;
+  });
+  function when(t) { return new Date(t * 60000).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }); }
+  function mmss(s) { return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
+  function draw(ids) {
+    $('out').innerHTML = ids.map(function (id) {
+      var lab = labs[id], rs = rows.filter(function (r) { return r.data.l === id; }), cs = lab.checks;
+      var missed = cs.map(function (c, i) { var m = rs.filter(function (r) { return r.data.c[i] !== '1'; }).length; return { label: c.label, m: m, pct: Math.round(100 * m / rs.length) }; })
+        .sort(function (a, b) { return b.m - a.m; });
+      return '<h2>' + esc(lab.title) + ' — ' + rs.length + ' attempt' + (rs.length === 1 ? '' : 's') + '</h2>' +
+        '<div class="table-wrap"><table><caption class="sr">Steps missed most often</caption><thead><tr><th scope="col">Step</th><th scope="col">Missed by</th><th scope="col"><span class="sr">Share</span></th></tr></thead><tbody>' +
+        missed.map(function (m) { return '<tr><td>' + esc(m.label) + '</td><td>' + m.m + ' of ' + rs.length + ' (' + m.pct + '%)</td><td><div class="bar" aria-hidden="true"><i style="width:' + m.pct + '%"></i></div></td></tr>'; }).join('') + '</tbody></table></div>' +
+        '<div class="table-wrap"><table><caption class="sr">Attempts</caption><thead><tr><th scope="col">Student</th><th scope="col">Mode</th><th scope="col">Score</th><th scope="col">When</th><th scope="col">Time</th><th scope="col">Actions</th><th scope="col">Hints</th>' +
+        cs.map(function (c, i) { return '<th scope="col" title="' + esc(c.label) + '">' + (i + 1) + '<span class="sr"> ' + esc(c.label) + '</span></th>'; }).join('') + '<th scope="col">Code check</th></tr></thead><tbody>' +
+        rs.map(function (r) { var d = r.data; return '<tr' + (r.valid ? '' : ' class="bad"') + '><td>' + esc(d.n) + '</td><td>' + (d.m === 'g' ? 'Graded' : 'Practice') + '</td><td>' + d.s + '%</td><td>' + esc(when(d.t)) + '</td><td>' + mmss(d.d) + '</td><td>' + d.a + '</td><td>' + d.h + '</td>' +
+          cs.map(function (c, i) { var y = d.c[i] === '1'; return '<td class="' + (y ? 'y' : 'n') + '">' + (y ? '✓' : '✗') + '<span class="sr">' + (y ? ' met' : ' missed') + '</span></td>'; }).join('') + '<td>' + (r.valid ? 'OK' : 'FAILED') + '</td></tr>'; }).join('') +
+        '</tbody></table></div><p class="muted">Columns: ' + cs.map(function (c, i) { return (i + 1) + ' = ' + esc(c.label); }).join('; ') + '</p>';
+    }).join('');
+  }
+  $('csv').addEventListener('click', function () {
+    var q = function (v) { return '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"'; };
+    var lines = [['Student', 'Lab', 'Mode', 'Score', 'When', 'Seconds', 'Actions', 'Hints', 'Steps met', 'Steps missed', 'Code check'].map(q).join(',')];
+    rows.forEach(function (r) { var d = r.data, cs = (labs[d.l] || {}).checks || [];
+      var met = [], miss = []; cs.forEach(function (c, i) { (d.c[i] === '1' ? met : miss).push(c.label); });
+      lines.push([d.n, (labs[d.l] || {}).title || d.l, d.m === 'g' ? 'Graded' : 'Practice', d.s, new Date(d.t * 60000).toISOString(), d.d, d.a, d.h, met.join('; '), miss.join('; '), r.valid ? 'OK' : 'FAILED'].map(q).join(',')); });
+    var a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([lines.join('\r\n')], { type: 'text/csv' })); a.download = 'it-virtual-labs-results.csv'; a.click();
+  });
+})();
+</script>
+</body>
+</html>

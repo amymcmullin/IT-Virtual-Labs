@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>__TITLE__</title>
+<style>
+  html, body { margin: 0; height: 100%; font: 16px/1.5 system-ui, sans-serif; }
+  iframe { border: 0; width: 100%; height: 100vh; display: block; }
+  #note { margin: 0; padding: .5rem 1rem; background: #fff4d6; }
+  #note:empty { display: none; }
+</style>
+</head>
+<body>
+<p id="note" role="status"></p>
+<iframe id="lab" title="__TITLE__" allow="clipboard-write"></iframe>
+<script>
+/* Thin SCORM 1.2 launcher. The lab itself lives on the public site; this page only
+   relays the student's name in and the score out. */
+(function () {
+  var SITE = '__SITE__', LAB = '__LAB__';
+  var ORIGIN = new URL(SITE).origin, frame = document.getElementById('lab'), note = document.getElementById('note');
+
+  function scan(w) { var n = 0; try { while (w && n++ < 12) { if (w.API) return w.API; if (!w.parent || w.parent === w) break; w = w.parent; } } catch (e) {} return null; }
+  var api = scan(window) || (window.opener ? scan(window.opener) : null), live = false, best = -1;
+  function call(fn, a, b) { try { return b === undefined ? api[fn](a) : api[fn](a, b); } catch (e) { return ''; } }
+
+  var name = '';
+  if (api) {
+    live = String(call('LMSInitialize', '')) === 'true';
+    var raw = String(call('LMSGetValue', 'cmi.core.student_name') || '');      // "Last, First"
+    var p = raw.split(','); name = p.length === 2 ? (p[1].trim() + ' ' + p[0].trim()) : raw.trim();
+    var prev = parseFloat(call('LMSGetValue', 'cmi.core.score.raw')); if (!isNaN(prev)) best = prev;
+    if (String(call('LMSGetValue', 'cmi.core.lesson_status')) === 'not attempted') { call('LMSSetValue', 'cmi.core.lesson_status', 'incomplete'); call('LMSCommit', ''); }
+  }
+  if (!live) note.textContent = 'This lab is not connected to the gradebook right now. You can still work it, but save your completion code.';
+
+  window.addEventListener('message', function (ev) {
+    if (ev.origin !== ORIGIN || ev.source !== frame.contentWindow || !ev.data) return;
+    if (ev.data.type === 'itvl-ready') frame.contentWindow.postMessage({ type: 'itvl-init', name: name }, ORIGIN);
+    if (ev.data.type === 'itvl-result' && live) {
+      var s = Math.max(0, Math.min(100, Number(ev.data.score) || 0));
+      if (s >= best) {                       // never lower a score already in the gradebook
+        best = s;
+        call('LMSSetValue', 'cmi.core.score.min', '0'); call('LMSSetValue', 'cmi.core.score.max', '100');
+        call('LMSSetValue', 'cmi.core.score.raw', String(s));
+        call('LMSSetValue', 'cmi.suspend_data', String(ev.data.code || '').slice(0, 4000));
+      }
+      call('LMSSetValue', 'cmi.core.lesson_status', 'completed');
+      call('LMSCommit', '');
+    }
+  });
+  var done = false;
+  function finish() { if (live && !done) { done = true; call('LMSCommit', ''); call('LMSFinish', ''); } }
+  window.addEventListener('pagehide', finish); window.addEventListener('beforeunload', finish);
+
+  frame.src = SITE + 'lab.html?lab=' + encodeURIComponent(LAB) + '&mode=graded&embed=1';
+})();
+</script>
+</body>
+</html>
