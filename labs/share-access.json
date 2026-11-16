@@ -1,0 +1,208 @@
+{
+  "id": "share-access",
+  "version": 1,
+  "title": "New team member can't open the department folder",
+  "scenario": "Ticket #4612 \u2014 Jordan Morales moved from Sales to Accounting on Monday. Jordan signs in normally but gets 'Access is denied' on \\\\FS01\\Accounting and needs to open and edit files there. Company policy: access to shared folders is granted through department groups only, never to individual users, and people get only the access their current job needs.",
+  "tasks": [
+    "Find out why Jordan is denied before you change anything.",
+    "Give Jordan the access the new job needs, the way company policy requires.",
+    "Remove access Jordan no longer needs.",
+    "Prove Jordan can edit a file in the folder before you close the ticket."
+  ],
+  "surfaces": [
+    "accounts",
+    "shares",
+    "accesstest"
+  ],
+  "accessTest": {
+    "user": "jmorales",
+    "share": "accounting"
+  },
+  "initialState": {
+    "dir": {
+      "groups": {
+        "Staff": "all employees",
+        "Sales": "Sales department",
+        "Accounting": "Accounting department",
+        "Managers": "department managers",
+        "IT Admins": "full control of servers and shares"
+      },
+      "users": {
+        "apatel": {
+          "name": "Anika Patel",
+          "title": "Accountant",
+          "groups": [
+            "Staff",
+            "Accounting"
+          ]
+        },
+        "jmorales": {
+          "name": "Jordan Morales",
+          "title": "Accounts Payable Clerk (was Sales Associate)",
+          "groups": [
+            "Staff",
+            "Sales"
+          ]
+        },
+        "lchen": {
+          "name": "Li Chen",
+          "title": "Finance Manager",
+          "groups": [
+            "Staff",
+            "Managers"
+          ]
+        },
+        "tbrooks": {
+          "name": "Tori Brooks",
+          "title": "Sales Associate",
+          "groups": [
+            "Staff",
+            "Sales"
+          ]
+        }
+      },
+      "shares": {
+        "accounting": {
+          "name": "Accounting",
+          "path": "\\\\FS01\\Accounting",
+          "perms": [
+            {
+              "who": "Accounting",
+              "kind": "group",
+              "level": "Modify"
+            },
+            {
+              "who": "Managers",
+              "kind": "group",
+              "level": "Read"
+            },
+            {
+              "who": "IT Admins",
+              "kind": "group",
+              "level": "Full control"
+            }
+          ]
+        },
+        "sales": {
+          "name": "Sales",
+          "path": "\\\\FS01\\Sales",
+          "perms": [
+            {
+              "who": "Sales",
+              "kind": "group",
+              "level": "Modify"
+            },
+            {
+              "who": "Managers",
+              "kind": "group",
+              "level": "Read"
+            },
+            {
+              "who": "IT Admins",
+              "kind": "group",
+              "level": "Full control"
+            }
+          ]
+        },
+        "public": {
+          "name": "Public",
+          "path": "\\\\FS01\\Public",
+          "perms": [
+            {
+              "who": "Staff",
+              "kind": "group",
+              "level": "Read"
+            },
+            {
+              "who": "IT Admins",
+              "kind": "group",
+              "level": "Full control"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "world": {},
+  "hints": [
+    "Two things decide access: which groups the folder allows, and which groups the user belongs to. Look at both before changing either.",
+    "Open Permissions on the Accounting folder, then Manage on Jordan. Compare Jordan's groups with Anika Patel's, who can already use the folder.",
+    "Policy says access comes from department groups. Which group should an Accounts Payable Clerk be in?",
+    "Jordan no longer works in Sales. Least privilege means removing the access the old job needed.",
+    "If the test still says access is denied after you fix the groups, look at how long Jordan has been signed in. Group changes take effect at the next sign-in.",
+    "Finish by testing 'Save a file in it' as Jordan on the Accounting folder."
+  ],
+  "checks": [
+    {
+      "id": "look",
+      "points": 10,
+      "type": "log",
+      "tag": [
+        "share:view:accounting",
+        "user:view:jmorales"
+      ],
+      "when": "before_first_change",
+      "label": "Checked the folder's permissions or Jordan's groups before changing anything",
+      "pass": "You looked at how access is granted before making a change.",
+      "fail": "You made a change before looking at the Accounting folder's permissions or Jordan's group membership, so you were guessing at the cause."
+    },
+    {
+      "id": "member",
+      "points": 25,
+      "type": "dir",
+      "user": "jmorales",
+      "memberOf": [
+        "Accounting"
+      ],
+      "label": "Jordan is a member of the Accounting group",
+      "pass": "Jordan is in the Accounting group, which is how the folder grants access.",
+      "fail": "Jordan is not in the Accounting group. The folder gives Modify access to that group, so membership is the fix."
+    },
+    {
+      "id": "edit",
+      "points": 15,
+      "type": "dir",
+      "user": "jmorales",
+      "canEdit": "accounting",
+      "label": "Jordan's access allows editing files in the folder",
+      "pass": "Jordan's access is Modify or better on the Accounting folder.",
+      "fail": "Jordan cannot edit files in the Accounting folder. Read access (for example through Managers) opens the folder but does not allow saving."
+    },
+    {
+      "id": "policy",
+      "points": 20,
+      "type": "dir",
+      "user": "jmorales",
+      "notMemberOf": [
+        "IT Admins",
+        "Managers"
+      ],
+      "sharesUntouched": true,
+      "label": "Followed policy: group-based access and no excess privilege",
+      "pass": "You left the folder permissions alone and did not put Jordan in a privileged group.",
+      "fail": "The fix breaks company policy. Do not add Jordan or Everyone to a folder's permission list, change a group's access level, or put Jordan in Managers or IT Admins. The department group already grants exactly what the job needs."
+    },
+    {
+      "id": "cleanup",
+      "points": 10,
+      "type": "dir",
+      "user": "jmorales",
+      "notMemberOf": [
+        "Sales"
+      ],
+      "label": "Removed Jordan from the Sales group",
+      "pass": "Jordan no longer has Sales access the new job does not need.",
+      "fail": "Jordan is still in the Sales group and can still change Sales files. Remove access when a person changes roles."
+    },
+    {
+      "id": "verify",
+      "points": 20,
+      "type": "log",
+      "tag": "access-ok:jmorales:accounting:edit",
+      "when": "after_last_change",
+      "label": "Confirmed Jordan can save a file in the folder after the last change",
+      "pass": "You tested as Jordan after your final change and the save worked.",
+      "fail": "You did not get a successful 'Save a file' test as Jordan on the Accounting folder after your last change. Remember that new group membership only applies after the user signs in again."
+    }
+  ]
+}

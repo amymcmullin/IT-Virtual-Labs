@@ -154,3 +154,6 @@ tr.bad td { background: var(--miss-bg); }
 .app-warn { background: var(--miss-bg); border-left: 4px solid var(--miss); padding: .6rem .9rem; border-radius: 4px; }
 .app-opts { display: flex; gap: 1.5rem; flex-wrap: wrap; }
 .pane-app th[scope=row] { background: none; font-size: .92rem; }
+label.inline { margin: 0; }
+.pane-app select { width: auto; max-width: 100%; }
+.pane-app td select { min-height: 36px; padding: .2rem .5rem; }

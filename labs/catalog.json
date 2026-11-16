@@ -157,6 +157,33 @@
           "2.4"
         ]
       }
+    },
+    {
+      "id": "share-access",
+      "title": "New team member can't open the department folder",
+      "summary": "A transferred employee is denied on a shared folder. Find out why, fix it through groups as policy requires, remove old access and prove it works.",
+      "minutes": 12,
+      "level": "Support",
+      "surfaces": [
+        "Users and Groups",
+        "Shared Folders",
+        "Access Test"
+      ],
+      "objectives": {
+        "A+ Core 2 (220-1202)": [
+          "1.7",
+          "2.1",
+          "2.2"
+        ],
+        "CCST IT Support": [
+          "1.3",
+          "3.1"
+        ],
+        "Tech+ (FC0-U71)": [
+          "1.4",
+          "6.1"
+        ]
+      }
     }
   ],
   "sets": {
@@ -179,6 +206,12 @@
       "title": "Printers and peripherals",
       "labs": [
         "print-stuck-queue"
+      ]
+    },
+    "access-and-accounts": {
+      "title": "Accounts and access",
+      "labs": [
+        "share-access"
       ]
     }
   }

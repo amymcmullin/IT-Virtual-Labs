@@ -2,7 +2,22 @@
 (function (root) {
   var Net = root.Net || (typeof require !== 'undefined' ? require('./net.js') : null);
   function getPath(obj, path) { return path.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, obj); }
-  function evalCheck(c, state, log, world) {
+  function dirLevel(D, user, share, groups) {
+    var order = ['Read', 'Modify', 'Full control'], best = 0;
+    D.shares[share].perms.forEach(function (p) {
+      if (p.kind === 'everyone' || (p.kind === 'user' && p.who === user) || (p.kind === 'group' && groups.indexOf(p.who) !== -1)) best = Math.max(best, order.indexOf(p.level) + 1);
+    });
+    return best;
+  }
+  function evalCheck(c, state, log, world, lab) {
+    if (c.type === 'dir') {
+      var D = state.dir, g = D.users[c.user].groups;
+      if ((c.memberOf || []).some(function (x) { return g.indexOf(x) === -1; })) return false;
+      if ((c.notMemberOf || []).some(function (x) { return g.indexOf(x) !== -1; })) return false;
+      if (c.canEdit && dirLevel(D, c.user, c.canEdit, g) < 2) return false;
+      if (c.sharesUntouched && JSON.stringify(D.shares) !== JSON.stringify(lab.initialState.dir.shares)) return false;
+      return true;
+    }
     if (c.type === 'state') return getPath(state, c.path) === c.equals;
     if (c.type === 'probe') return !!Net.probes[c.probe](state, world);
     if (c.type === 'bench') {
@@ -35,7 +50,7 @@
   function grade(lab, state, log) {
     var total = 0, earned = 0;
     var results = lab.checks.map(function (c) {
-      var ok = evalCheck(c, state, log, lab.world);
+      var ok = evalCheck(c, state, log, lab.world, lab);
       total += c.points; if (ok) earned += c.points;
       return { id: c.id, label: c.label, points: c.points, ok: ok, text: ok ? c.pass : c.fail };
     });
