@@ -1,0 +1,380 @@
+{
+  "id": "bench-ram-psu",
+  "version": 1,
+  "title": "Upgrade the memory and power supply",
+  "scenario": "Work order #2231 \u2014 Upgrade the CAD workstation in the design office. Replace its two 4 GB memory modules with the matched 16 GB kit for 32 GB total. The motherboard takes DDR4 desktop memory, and its manual says to fill slots A2 and B2 first so the pair runs in dual-channel mode. Also replace the 300 W power supply: a graphics card arriving next week needs one PCIe 8-pin power connector and brings the system to about 420 W. The PC is plugged in and switched on at the supply when you arrive. Follow shop safety practice.",
+  "tasks": [
+    "Make the PC safe to work on before you touch anything inside.",
+    "Replace the memory with the right modules in the right slots.",
+    "Install a power supply that suits the upgrade planned for next week.",
+    "Restore power, start the PC and confirm the memory before you finish."
+  ],
+  "surfaces": [
+    "bench"
+  ],
+  "initialState": {
+    "bench": {
+      "conn": {
+        "cord": "pwr",
+        "psu300": "bay",
+        "old4a": "a2",
+        "old4b": "b2"
+      },
+      "switchOn": true
+    }
+  },
+  "world": {},
+  "bench": {
+    "title": "Inside the case",
+    "trayTitle": "Parts and tools",
+    "how": "Select a part, then select where it goes. To remove a part, select it and use Unplug selected.",
+    "height": 470,
+    "pairs": [
+      [
+        "a1",
+        "b1"
+      ],
+      [
+        "a2",
+        "b2"
+      ]
+    ],
+    "groups": [
+      {
+        "label": "Power supply",
+        "y": 8,
+        "h": 118
+      },
+      {
+        "label": "Motherboard",
+        "y": 140,
+        "h": 226
+      },
+      {
+        "label": "Chassis",
+        "y": 380,
+        "h": 78
+      }
+    ],
+    "decor": [
+      {
+        "t": "rect",
+        "x": 40,
+        "y": 172,
+        "width": 84,
+        "height": 84,
+        "rx": 4,
+        "fill": "#8d99a3",
+        "stroke": "#2a333b"
+      },
+      {
+        "t": "text",
+        "x": 82,
+        "y": 218,
+        "text-anchor": "middle",
+        "fill": "#16212b",
+        "font-size": 11,
+        "font-weight": 600,
+        "text": "CPU cooler"
+      },
+      {
+        "t": "rect",
+        "x": 40,
+        "y": 300,
+        "width": 230,
+        "height": 10,
+        "rx": 1,
+        "fill": "#1b1b1b",
+        "stroke": "#c9d1d8"
+      },
+      {
+        "t": "text",
+        "x": 40,
+        "y": 328,
+        "fill": "#e7edf1",
+        "font-size": 9,
+        "text": "PCIe x16 slot (empty until next week)"
+      },
+      {
+        "t": "text",
+        "x": 180,
+        "y": 166,
+        "fill": "#e7edf1",
+        "font-size": 9,
+        "text": "Memory slots"
+      },
+      {
+        "t": "text",
+        "x": 80,
+        "y": 426,
+        "fill": "#e7edf1",
+        "font-size": 9,
+        "text": "Unpainted metal on the case frame"
+      }
+    ],
+    "ports": [
+      {
+        "id": "bay",
+        "type": "psu-bay",
+        "x": 28,
+        "y": 34,
+        "role": "psu-bay",
+        "short": "Supply bay",
+        "name": "Power supply bay",
+        "look": "power supply bay"
+      },
+      {
+        "id": "pwr",
+        "type": "c14",
+        "x": 168,
+        "y": 44,
+        "role": "power-in",
+        "name": "Power inlet (wall cord)",
+        "look": "three-pin power inlet"
+      },
+      {
+        "id": "sw",
+        "type": "switch",
+        "x": 276,
+        "y": 54,
+        "role": "switch",
+        "name": "Power supply switch",
+        "look": "rocker switch on the power supply"
+      },
+      {
+        "id": "a1",
+        "type": "ddr4",
+        "x": 180,
+        "y": 178,
+        "color": "#1b1b1b",
+        "silk": "A1",
+        "name": "Memory slot A1 (black)",
+        "look": "memory slot A1, black"
+      },
+      {
+        "id": "a2",
+        "type": "ddr4",
+        "x": 180,
+        "y": 204,
+        "color": "#7b8791",
+        "silk": "A2",
+        "name": "Memory slot A2 (grey)",
+        "look": "memory slot A2, grey"
+      },
+      {
+        "id": "b1",
+        "type": "ddr4",
+        "x": 180,
+        "y": 230,
+        "color": "#1b1b1b",
+        "silk": "B1",
+        "name": "Memory slot B1 (black)",
+        "look": "memory slot B1, black"
+      },
+      {
+        "id": "b2",
+        "type": "ddr4",
+        "x": 180,
+        "y": 256,
+        "color": "#7b8791",
+        "silk": "B2",
+        "name": "Memory slot B2 (grey)",
+        "look": "memory slot B2, grey"
+      },
+      {
+        "id": "gnd",
+        "type": "esd",
+        "x": 40,
+        "y": 408,
+        "role": "ground",
+        "short": "Ground point",
+        "name": "Bare metal ground point",
+        "look": "unpainted metal point on the case frame"
+      }
+    ],
+    "items": [
+      {
+        "id": "strap",
+        "name": "Anti-static wrist strap",
+        "fits": "esd",
+        "role": "esd"
+      },
+      {
+        "id": "cord",
+        "name": "Wall power cord",
+        "fits": "c14",
+        "role": "power"
+      },
+      {
+        "id": "old4a",
+        "name": "4 GB DDR4 DIMM (old, 1 of 2)",
+        "fits": "ddr4",
+        "role": "ram",
+        "gb": 4
+      },
+      {
+        "id": "old4b",
+        "name": "4 GB DDR4 DIMM (old, 2 of 2)",
+        "fits": "ddr4",
+        "role": "ram",
+        "gb": 4
+      },
+      {
+        "id": "k16a",
+        "name": "16 GB DDR4 DIMM (kit, 1 of 2)",
+        "fits": "ddr4",
+        "role": "ram",
+        "gb": 16
+      },
+      {
+        "id": "k16b",
+        "name": "16 GB DDR4 DIMM (kit, 2 of 2)",
+        "fits": "ddr4",
+        "role": "ram",
+        "gb": 16
+      },
+      {
+        "id": "d3",
+        "name": "8 GB DDR3 DIMM",
+        "fits": "ddr3",
+        "role": "ram",
+        "gb": 8
+      },
+      {
+        "id": "d5",
+        "name": "16 GB DDR5 DIMM",
+        "fits": "ddr5",
+        "role": "ram",
+        "gb": 16
+      },
+      {
+        "id": "so",
+        "name": "16 GB DDR4 SO-DIMM (laptop size)",
+        "fits": "sodimm",
+        "role": "ram",
+        "gb": 16
+      },
+      {
+        "id": "psu300",
+        "name": "300 W supply (old): no PCIe power connectors",
+        "fits": "psu-bay",
+        "role": "psu",
+        "watts": 300
+      },
+      {
+        "id": "psu450",
+        "name": "450 W supply: one PCIe 6-pin connector",
+        "fits": "psu-bay",
+        "role": "psu",
+        "watts": 450
+      },
+      {
+        "id": "psu650",
+        "name": "650 W supply: two PCIe 8-pin connectors",
+        "fits": "psu-bay",
+        "role": "psu",
+        "watts": 650
+      }
+    ]
+  },
+  "hints": [
+    "Before touching anything inside: what is still feeding electricity to this PC, and what protects the parts from the static on your body?",
+    "Unplug the wall power cord (select it, then Unplug selected). Then connect the wrist strap to bare metal on the case.",
+    "The old 4 GB modules are in the slots the new kit needs. Remove them first.",
+    "DDR3, DDR4 and DDR5 are keyed differently and are not interchangeable, and SO-DIMMs are for laptops. The work order says which type this board takes.",
+    "The manual says A2 and B2. On most boards the paired slots share a colour.",
+    "For the power supply, check two things against the work order: enough watts with headroom, and the exact connector the new card needs.",
+    "Put the power cord back, make sure the switch is on, then press the power button and read the memory total."
+  ],
+  "checks": [
+    {
+      "id": "unplug",
+      "points": 15,
+      "type": "log_order",
+      "first": "disconnect:cord",
+      "before": [
+        "handle:ram",
+        "handle:psu"
+      ],
+      "label": "Unplugged the power cord before handling internal parts",
+      "pass": "You removed mains power before touching memory or the power supply.",
+      "fail": "You handled internal parts while the PC was still plugged in. Always disconnect the power cord first; the switch alone is not enough."
+    },
+    {
+      "id": "esd",
+      "points": 10,
+      "type": "log_order",
+      "first": "connect:strap",
+      "before": [
+        "handle:ram",
+        "handle:psu"
+      ],
+      "label": "Connected the anti-static strap before handling internal parts",
+      "pass": "You grounded yourself to the case before touching components.",
+      "fail": "You handled components without first connecting the anti-static strap to bare metal. Static you cannot feel can damage memory."
+    },
+    {
+      "id": "ram",
+      "points": 25,
+      "type": "bench",
+      "need": [
+        {
+          "item": "k16a",
+          "ports": [
+            "a2",
+            "b2"
+          ]
+        },
+        {
+          "item": "k16b",
+          "ports": [
+            "a2",
+            "b2"
+          ]
+        }
+      ],
+      "absent": [
+        "old4a",
+        "old4b"
+      ],
+      "label": "16 GB kit installed in slots A2 and B2, old modules removed",
+      "pass": "Both 16 GB modules are in A2 and B2 and the old 4 GB modules are out: 32 GB in dual-channel mode.",
+      "fail": "The memory is not as the work order asked. Both 16 GB DDR4 modules belong in A2 and B2, with the two old 4 GB modules removed."
+    },
+    {
+      "id": "fit",
+      "points": 10,
+      "type": "log_none",
+      "tag": "misfit",
+      "label": "Did not try a part where it does not fit",
+      "pass": "Every part you tried matched its slot.",
+      "fail": "You tried at least one part where it does not fit. DDR3, DDR5 and SO-DIMM modules are keyed differently from DDR4 desktop slots; forcing one damages the slot."
+    },
+    {
+      "id": "psu",
+      "points": 20,
+      "type": "bench",
+      "need": [
+        {
+          "item": "psu650",
+          "ports": [
+            "bay"
+          ]
+        }
+      ],
+      "label": "Installed a power supply that suits next week's graphics card",
+      "pass": "The 650 W supply has the PCIe 8-pin connector the card needs and comfortable headroom over 420 W.",
+      "fail": "The installed power supply does not suit the upgrade. The card needs a PCIe 8-pin connector and the system will draw about 420 W: the 450 W unit has only a 6-pin connector and almost no headroom, and the 300 W unit is too small."
+    },
+    {
+      "id": "verify",
+      "points": 20,
+      "type": "log",
+      "tag": "power:ok",
+      "when": "after_last_change",
+      "label": "Restored power and confirmed the PC starts after the last change",
+      "pass": "You reconnected power, started the PC and read the memory total.",
+      "fail": "You did not successfully power the PC on after your last change. Reconnect the cord, check the switch, start the PC and confirm the memory total before handing it back."
+    }
+  ]
+}

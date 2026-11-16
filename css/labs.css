@@ -50,7 +50,7 @@ legend { font-weight: 600; padding: 0 .3rem; }
 .tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: .6rem; }
 .tabs button { background: #2c3b4b; border-color: #2c3b4b; color: #dce5ec; }
 .tabs button[aria-selected=true] { background: #fff; color: var(--ink); border-color: #fff; font-weight: 600; }
-.pane { border-radius: 8px; overflow: hidden; }
+.pane { border-radius: 8px; }
 .pane-terminal { background: var(--term); color: var(--term-ink); font-family: ui-monospace, Menlo, Consolas, monospace; font-size: .9rem; }
 .term-out { height: min(58vh, 30rem); overflow: auto; padding: .8rem; }
 .term-out pre { margin: 0; white-space: pre-wrap; word-break: break-word; font: inherit; }
@@ -124,6 +124,7 @@ tr.bad td { background: var(--miss-bg); }
 
 /* workbench */
 .pane-bench { background: #fff; padding: 1rem; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 1.2rem; align-items: start; }
+.bench-panel { position: sticky; top: 4.5rem; }
 .bench-panel svg { width: 100%; max-width: 30rem; height: auto; display: block; }
 .port { cursor: pointer; outline: none; }
 .port:hover .hit { stroke: #fff; stroke-width: 1.5; }
@@ -139,4 +140,4 @@ tr.bad td { background: var(--miss-bg); }
 .bench-status { min-height: 1.5rem; font-weight: 600; margin: .8rem 0 0; }
 .bench-obs h4 { margin: .8rem 0 .3rem; }
 .bench-obs ul { margin: 0; padding-left: 1.2rem; }
-@media (max-width: 760px) { .pane-bench { grid-template-columns: 1fr; padding: .7rem; } }
+@media (max-width: 760px) { .pane-bench { grid-template-columns: 1fr; padding: .7rem; } .bench-panel { position: static; } }

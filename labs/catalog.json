@@ -107,6 +107,32 @@
           "2.5"
         ]
       }
+    },
+    {
+      "id": "bench-ram-psu",
+      "title": "Upgrade the memory and power supply",
+      "summary": "Make a PC safe to open, replace its memory with the right modules in the right slots, choose a suitable power supply and confirm it starts.",
+      "minutes": 12,
+      "level": "Support",
+      "surfaces": [
+        "Workbench"
+      ],
+      "objectives": {
+        "A+ Core 1 (220-1201)": [
+          "3.3",
+          "3.6"
+        ],
+        "A+ Core 2 (220-1202)": [
+          "4.4"
+        ],
+        "CCST IT Support": [
+          "2.1",
+          "2.4"
+        ],
+        "Tech+ (FC0-U71)": [
+          "2.2"
+        ]
+      }
     }
   ],
   "sets": {
@@ -121,7 +147,8 @@
     "hardware-basics": {
       "title": "Hardware basics",
       "labs": [
-        "bench-cables"
+        "bench-cables",
+        "bench-ram-psu"
       ]
     }
   }

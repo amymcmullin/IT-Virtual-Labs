@@ -8,7 +8,14 @@
     if (c.type === 'bench') {
       var bs = state.bench || { conn: {} };
       if (c.switchOn && !bs.switchOn) return false;
+      if ((c.absent || []).some(function (id) { return !!bs.conn[id]; })) return false;
       return (c.need || []).every(function (n) { return n.ports.indexOf(bs.conn[n.item]) !== -1; });
+    }
+    if (c.type === 'log_order') {       // an event tagged c.first must happen before the first event tagged c.before
+      var has = function (e, t) { return e.tags && [].concat(t).some(function (x) { return e.tags.indexOf(x) !== -1; }); };
+      var ia = -1, ib = -1;
+      log.forEach(function (e, i) { if (ia === -1 && has(e, c.first)) ia = i; if (ib === -1 && has(e, c.before)) ib = i; });
+      return ia !== -1 && (ib === -1 || ia < ib);
     }
     if (c.type === 'log_none') return !log.some(function (e) { return e.tags && e.tags.indexOf(c.tag) !== -1; });
     if (c.type === 'log') {

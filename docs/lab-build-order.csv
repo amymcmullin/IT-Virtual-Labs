@@ -3,7 +3,7 @@ Build order,Lab,Tier,Tech+ FC0-U71,CCST IT Support,A+ Core 1 220-1201,A+ Core 2 
 2,Front office PC can't get online (wrong gateway),2 Support,"1.4, 2.8","1.3, 3.3",5.5,"1.5, 1.7","Command Prompt, Network Settings",Built
 3,Websites won't load by name (DNS setting),2 Support,"1.4, 2.8","1.3, 3.3","2.3, 2.4, 5.5","1.5, 1.7","Command Prompt, Network Settings",Built
 4,Build the workstation: connect the right cables,1 Foundation,"2.4, 2.5",2.3,3.2,,Workbench (back panel),Built
-5,Upgrade the RAM and pick the right power supply,2 Support,2.2,"2.4, 2.5","3.3, 3.5, 3.6, 5.1",,Workbench (inside case),None after lab 4
+5,Upgrade the memory and power supply,2 Support,2.2,"2.4, 2.5","3.3, 3.5, 3.6, 5.1",,Workbench (inside case),Built
 6,Nothing prints: stuck queue and offline printer,2 Support,2.4,3.2,"3.7, 5.6",,Devices and Printers,Devices and Printers
 7,User can't open the department share,2 Support,6.1,3.1,,"1.5, 1.7, 2.2","Users and Groups, File sharing, Command Prompt","Users and Groups, File sharing"
 8,Secure the new office wireless router,1 Foundation,"2.9, 6.5",3.3,"2.2, 2.6","2.3, 2.10",Router admin page,Router admin page
