@@ -236,6 +236,31 @@
           "6.2"
         ]
       }
+    },
+    {
+      "id": "slow-pc",
+      "title": "The PC that takes forever",
+      "summary": "A slow start and a loud fan. Find the runaway process, trim startup to what the office requires without breaking anything, restart and confirm.",
+      "minutes": 10,
+      "level": "Support",
+      "surfaces": [
+        "Talk to the User",
+        "Task Manager"
+      ],
+      "objectives": {
+        "A+ Core 2 (220-1202)": [
+          "1.4",
+          "3.1"
+        ],
+        "CCST IT Support": [
+          "1.3",
+          "4.1"
+        ],
+        "Tech+ (FC0-U71)": [
+          "1.4",
+          "3.1"
+        ]
+      }
     }
   ],
   "sets": {
@@ -271,6 +296,12 @@
       "labs": [
         "router-secure",
         "malware-removal"
+      ]
+    },
+    "windows-support": {
+      "title": "Windows support",
+      "labs": [
+        "slow-pc"
       ]
     }
   }

@@ -1,0 +1,315 @@
+{
+  "id": "slow-pc",
+  "version": 1,
+  "title": "The PC that takes forever",
+  "scenario": "Ticket #4671 \u2014 Riley in accounts (ACCT-PC-04) says the PC takes over a minute to start, the fan runs loudly all day and everything lags. A malware scan this morning came back clean. The office requires three things to start with every PC: the anti-malware service, Cloud file sync and the LedgerSuite Agent. Nothing else needs to start automatically.",
+  "tasks": [
+    "Find out what changed and what is using the PC's resources.",
+    "Stop whatever is overloading the PC right now.",
+    "Make sure only the programs the office requires start with the PC.",
+    "Restart the PC and confirm it starts quickly and runs quietly.",
+    "Tell the user what they need to know."
+  ],
+  "surfaces": [
+    "userchat",
+    "taskmgr"
+  ],
+  "initialState": {
+    "userchat": {
+      "briefed": null
+    },
+    "tm": {
+      "perf": true,
+      "memTotal": 8,
+      "memBase": 1400,
+      "bootBase": 14,
+      "bootSecs": 75,
+      "goodBoot": 30,
+      "goodCpu": 30,
+      "processes": [
+        {
+          "id": "indexer",
+          "name": "Media Library Indexer",
+          "publisher": "TuneShelf",
+          "cpu": 84,
+          "mem": 910,
+          "startupId": "indexer"
+        },
+        {
+          "id": "games",
+          "name": "PlayHub Launcher",
+          "publisher": "PlayHub",
+          "cpu": 4,
+          "mem": 520,
+          "startupId": "games"
+        },
+        {
+          "id": "chat",
+          "name": "ChatterBox",
+          "publisher": "ChatterBox",
+          "cpu": 2,
+          "mem": 410,
+          "startupId": "chat"
+        },
+        {
+          "id": "music",
+          "name": "TuneShelf Player",
+          "publisher": "TuneShelf",
+          "cpu": 2,
+          "mem": 330,
+          "startupId": "music"
+        },
+        {
+          "id": "browser",
+          "name": "Web browser",
+          "publisher": "Browser vendor",
+          "cpu": 5,
+          "mem": 760
+        },
+        {
+          "id": "ledger",
+          "name": "LedgerSuite Agent",
+          "publisher": "LedgerSuite",
+          "cpu": 1,
+          "mem": 95,
+          "startupId": "ledger"
+        },
+        {
+          "id": "sync",
+          "name": "Cloud file sync",
+          "publisher": "OS vendor",
+          "cpu": 1,
+          "mem": 150,
+          "startupId": "sync"
+        },
+        {
+          "id": "av",
+          "name": "Anti-malware service",
+          "publisher": "Security vendor",
+          "cpu": 1,
+          "mem": 120,
+          "startupId": "av"
+        },
+        {
+          "id": "shell",
+          "name": "Desktop shell",
+          "publisher": "OS vendor",
+          "cpu": 2,
+          "mem": 90
+        }
+      ],
+      "startup": [
+        {
+          "id": "indexer",
+          "name": "Media Library Indexer",
+          "publisher": "TuneShelf",
+          "impact": "High",
+          "enabled": true
+        },
+        {
+          "id": "games",
+          "name": "PlayHub Launcher",
+          "publisher": "PlayHub",
+          "impact": "High",
+          "enabled": true
+        },
+        {
+          "id": "chat",
+          "name": "ChatterBox",
+          "publisher": "ChatterBox",
+          "impact": "Medium",
+          "enabled": true
+        },
+        {
+          "id": "music",
+          "name": "TuneShelf Player",
+          "publisher": "TuneShelf",
+          "impact": "Medium",
+          "enabled": true
+        },
+        {
+          "id": "ledger",
+          "name": "LedgerSuite Agent",
+          "publisher": "LedgerSuite",
+          "impact": "Low",
+          "enabled": true
+        },
+        {
+          "id": "sync",
+          "name": "Cloud file sync",
+          "publisher": "OS vendor",
+          "impact": "Medium",
+          "enabled": true
+        },
+        {
+          "id": "av",
+          "name": "Anti-malware service",
+          "publisher": "Security vendor",
+          "impact": "Low",
+          "enabled": true
+        }
+      ]
+    }
+  },
+  "world": {},
+  "user": {
+    "name": "Riley",
+    "story": "It was fine until a couple of weeks ago. I added a music player for the afternoons, a chat app my friends use and a games launcher for lunch breaks. I never open most of them, but they all seem to be running.",
+    "advice": [
+      {
+        "text": "\"I removed some things. It should be fine now.\"",
+        "short": "vague reassurance",
+        "good": false,
+        "reply": "Okay. If it slows down again I'll just reinstall the music player, I suppose."
+      },
+      {
+        "text": "\"Several programs you installed were starting with the PC, and one of them was stuck using most of the processor. I've stopped them from starting automatically; you can still open them when you want them. Please ask IT before installing software on a work PC.\"",
+        "short": "explained the cause, what changed and what to do next time",
+        "good": true,
+        "reply": "That makes sense. I didn't realize they ran all the time. I'll ask first from now on."
+      },
+      {
+        "text": "\"Personal software isn't allowed. I've reported this to your manager.\"",
+        "short": "threatened the user",
+        "good": false,
+        "reply": "Oh. I didn't know that was a rule. I wish someone had told me."
+      }
+    ]
+  },
+  "hints": [
+    "Ask the user what changed, then open Task Manager and sort out which process is using the most CPU.",
+    "One process is using most of the processor on its own. Ending it gives immediate relief, but ask yourself whether it will come back.",
+    "Look at the Startup apps list and its impact column. Compare it with the three programs the ticket says the office requires.",
+    "Disable startup for anything the office does not require. Do not disable the three required programs, and do not end system processes.",
+    "Changes to startup only show after a restart. Use Restart the PC and read the startup time and CPU figure.",
+    "Before you close the ticket, tell the user what you found and what you changed."
+  ],
+  "checks": [
+    {
+      "id": "investigate",
+      "points": 10,
+      "type": "log",
+      "tag": "investigate",
+      "when": "before_first_change",
+      "practice": "Gathered information before making changes",
+      "label": "Investigated before changing anything",
+      "pass": "You asked the user or reviewed Task Manager before acting.",
+      "fail": "You began ending tasks or changing startup before asking the user or reviewing what was running."
+    },
+    {
+      "id": "runaway",
+      "points": 20,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "tm.running.indexer",
+          "op": "eq",
+          "value": false
+        }
+      ],
+      "practice": "Nothing is overloading the processor",
+      "label": "Stopped the runaway Media Library Indexer",
+      "pass": "The stuck indexer is no longer running.",
+      "fail": "The Media Library Indexer is still running and using most of the processor. If you ended it, it came back at restart because it was still set to start with the PC."
+    },
+    {
+      "id": "startup",
+      "points": 25,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "tm.startup.0.enabled",
+          "op": "eq",
+          "value": false
+        },
+        {
+          "path": "tm.startup.1.enabled",
+          "op": "eq",
+          "value": false
+        },
+        {
+          "path": "tm.startup.2.enabled",
+          "op": "eq",
+          "value": false
+        },
+        {
+          "path": "tm.startup.3.enabled",
+          "op": "eq",
+          "value": false
+        }
+      ],
+      "practice": "Only what the office requires starts with the PC",
+      "label": "Disabled startup for the four programs the office does not require",
+      "pass": "The indexer, games launcher, chat app and music player no longer start with the PC.",
+      "fail": "At least one program the office does not require still starts with the PC: Media Library Indexer, PlayHub Launcher, ChatterBox or TuneShelf Player."
+    },
+    {
+      "id": "required",
+      "points": 20,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "tm.startup.4.enabled",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "tm.startup.5.enabled",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "tm.startup.6.enabled",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "tm.running.av",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "tm.running.sync",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "tm.running.ledger",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "tm.running.shell",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "practice": "Everything the office requires is still running",
+      "label": "Left the required programs and system processes running",
+      "pass": "Anti-malware, Cloud file sync, the LedgerSuite Agent and the desktop are all running and set to start.",
+      "fail": "Something the PC needs was stopped or disabled. The anti-malware service, Cloud file sync and LedgerSuite Agent must stay enabled and running, and system processes such as the Desktop shell should not be ended."
+    },
+    {
+      "id": "verify",
+      "points": 15,
+      "type": "log",
+      "tag": "tm:restart:good",
+      "when": "after_last_change",
+      "practice": "Confirmed the improvement after the last change",
+      "label": "Restarted and confirmed a fast startup and low CPU after the last change",
+      "pass": "After your final change the PC restarted in 30 seconds or less with low CPU use.",
+      "fail": "You did not restart the PC after your last change and see a startup of 30 seconds or less with low CPU use. Startup changes only take effect at the next restart."
+    },
+    {
+      "id": "educate",
+      "points": 10,
+      "type": "state",
+      "path": "userchat.briefed",
+      "equals": "good",
+      "practice": "The user knows what to do next time",
+      "label": "Explained the cause and what to do next time",
+      "pass": "You explained what caused the slowdown, what you changed and when to ask IT.",
+      "fail": "The user was not given useful guidance. Explain what was slowing the PC, what you changed and that they should ask before installing software; do not be vague or threatening."
+    }
+  ]
+}
