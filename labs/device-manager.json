@@ -1,0 +1,318 @@
+{
+  "id": "device-manager",
+  "version": 1,
+  "title": "No sound after yesterday's update",
+  "scenario": "Ticket #4690 \u2014 Casey's laptop (SALES-LT-02) installed driver updates overnight. Since then there is no sound at all. Casey also says the Bluetooth headset stopped connecting some time ago, and the SD card slot has never worked on this laptop. The screen, network, keyboard, mouse and webcam are all fine and Casey needs them untouched.",
+  "tasks": [
+    "Find the devices that have a problem and read what each one reports.",
+    "Fix each faulty device with the action that suits its particular fault.",
+    "Leave the working devices exactly as they are.",
+    "Test the three devices from the ticket before you close it."
+  ],
+  "surfaces": [
+    "devmgr"
+  ],
+  "deviceTest": [
+    {
+      "id": "audio",
+      "label": "Sound",
+      "ok": "plays.",
+      "bad": "nothing plays."
+    },
+    {
+      "id": "bt",
+      "label": "Bluetooth",
+      "ok": "the headset pairs.",
+      "bad": "no adapter available."
+    },
+    {
+      "id": "reader",
+      "label": "SD card slot",
+      "ok": "the card is read.",
+      "bad": "nothing happens."
+    }
+  ],
+  "initialState": {
+    "dev": {
+      "devices": {
+        "audio": {
+          "cat": "Sound and audio",
+          "name": "Speakers and microphone (High Definition Audio)",
+          "status": "error",
+          "present": true,
+          "driver": {
+            "version": "6.2.0",
+            "date": "yesterday",
+            "prev": {
+              "version": "6.1.4",
+              "date": "March"
+            }
+          },
+          "faultStatus": "error",
+          "fixBy": "rollback"
+        },
+        "bt": {
+          "cat": "Bluetooth",
+          "name": "Bluetooth adapter",
+          "status": "disabled",
+          "present": true,
+          "driver": {
+            "version": "10.0.1",
+            "date": "last year"
+          },
+          "fixBy": "enable"
+        },
+        "reader": {
+          "cat": "Other devices",
+          "name": "Unknown device",
+          "status": "nodriver",
+          "present": true,
+          "driver": null,
+          "faultStatus": "nodriver",
+          "fixBy": "update",
+          "realName": "SD card reader",
+          "need": {
+            "version": "2.3.0",
+            "date": "this year"
+          }
+        },
+        "display": {
+          "cat": "Display adapters",
+          "name": "Integrated graphics",
+          "status": "ok",
+          "present": true,
+          "driver": {
+            "version": "31.0.2",
+            "date": "yesterday",
+            "prev": {
+              "version": "31.0.1",
+              "date": "June"
+            }
+          }
+        },
+        "net": {
+          "cat": "Network adapters",
+          "name": "Ethernet controller",
+          "status": "ok",
+          "present": true,
+          "driver": {
+            "version": "10.0.1",
+            "date": "last year"
+          }
+        },
+        "wifi": {
+          "cat": "Network adapters",
+          "name": "Wireless network adapter",
+          "status": "ok",
+          "present": true,
+          "driver": {
+            "version": "10.0.1",
+            "date": "last year"
+          }
+        },
+        "kbd": {
+          "cat": "Keyboards",
+          "name": "Standard keyboard",
+          "status": "ok",
+          "present": true,
+          "driver": {
+            "version": "10.0.1",
+            "date": "last year"
+          }
+        },
+        "mouse": {
+          "cat": "Mice and pointing devices",
+          "name": "USB optical mouse",
+          "status": "ok",
+          "present": true,
+          "driver": {
+            "version": "10.0.1",
+            "date": "last year"
+          }
+        },
+        "cam": {
+          "cat": "Cameras",
+          "name": "Integrated webcam",
+          "status": "ok",
+          "present": true,
+          "driver": {
+            "version": "10.0.1",
+            "date": "last year"
+          }
+        }
+      }
+    }
+  },
+  "world": {},
+  "hints": [
+    "Device Manager marks problem devices. An exclamation mark and a down arrow mean different things.",
+    "Open each marked device and read the Device status line and the driver details. Each of the three reports a different problem.",
+    "A device with a down arrow is not broken. Someone turned it off.",
+    "A device with no driver needs one installed. Which button looks for a driver?",
+    "The sound stopped the day a new driver arrived, and the previous driver is still on the PC. Updating again will not help, because the faulty driver is already the newest.",
+    "Use 'Test the devices in the ticket' when you think you are done."
+  ],
+  "checks": [
+    {
+      "id": "look",
+      "points": 10,
+      "type": "log",
+      "tag": "dev:view:problem",
+      "when": "before_first_change",
+      "practice": "Gathered information before making changes",
+      "label": "Opened a faulty device's properties before changing anything",
+      "pass": "You read what a faulty device reported before acting.",
+      "fail": "You changed something before opening the properties of a faulty device. The status line and driver date tell you which fix applies."
+    },
+    {
+      "id": "audio",
+      "points": 25,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "dev.devices.audio.status",
+          "op": "eq",
+          "value": "ok"
+        },
+        {
+          "path": "dev.devices.audio.present",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "practice": "Sound works again",
+      "label": "Restored sound by rolling back the faulty driver",
+      "pass": "The audio device works again on its previous driver.",
+      "fail": "The audio device still does not work. It failed when yesterday's driver arrived, so roll back to the previous driver. Updating finds nothing newer, and uninstalling then rescanning reinstalls the same faulty driver."
+    },
+    {
+      "id": "bt",
+      "points": 15,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "dev.devices.bt.status",
+          "op": "eq",
+          "value": "ok"
+        },
+        {
+          "path": "dev.devices.bt.present",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "practice": "Bluetooth works again",
+      "label": "Enabled the Bluetooth adapter",
+      "pass": "The Bluetooth adapter is enabled.",
+      "fail": "The Bluetooth adapter is still disabled or missing. A down arrow means the device was turned off; enable it."
+    },
+    {
+      "id": "reader",
+      "points": 20,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "dev.devices.reader.status",
+          "op": "eq",
+          "value": "ok"
+        },
+        {
+          "path": "dev.devices.reader.present",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "practice": "The SD card slot works",
+      "label": "Installed a driver for the unknown device (SD card reader)",
+      "pass": "The unknown device now has a driver and is identified as the SD card reader.",
+      "fail": "The unknown device still has no driver. Use Update driver on it so a driver is found and installed."
+    },
+    {
+      "id": "others",
+      "points": 15,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "dev.devices.display.status",
+          "op": "eq",
+          "value": "ok"
+        },
+        {
+          "path": "dev.devices.display.present",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "dev.devices.net.status",
+          "op": "eq",
+          "value": "ok"
+        },
+        {
+          "path": "dev.devices.net.present",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "dev.devices.wifi.status",
+          "op": "eq",
+          "value": "ok"
+        },
+        {
+          "path": "dev.devices.wifi.present",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "dev.devices.kbd.status",
+          "op": "eq",
+          "value": "ok"
+        },
+        {
+          "path": "dev.devices.kbd.present",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "dev.devices.mouse.status",
+          "op": "eq",
+          "value": "ok"
+        },
+        {
+          "path": "dev.devices.mouse.present",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "dev.devices.cam.status",
+          "op": "eq",
+          "value": "ok"
+        },
+        {
+          "path": "dev.devices.cam.present",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "dev.devices.display.driver.version",
+          "op": "eq",
+          "value": "31.0.2"
+        }
+      ],
+      "practice": "Working devices were left alone",
+      "label": "Left the working devices untouched",
+      "pass": "The display, network, keyboard, mouse and webcam are exactly as you found them.",
+      "fail": "A device that was working has been disabled, uninstalled or had its driver changed. Only the three devices in the ticket needed attention."
+    },
+    {
+      "id": "verify",
+      "points": 15,
+      "type": "log",
+      "tag": "dev:test:ok",
+      "when": "after_last_change",
+      "practice": "Confirmed the fix after the last change",
+      "label": "Tested all three devices successfully after the last change",
+      "pass": "Sound, Bluetooth and the card slot all passed your final test.",
+      "fail": "You did not run a test in which sound, Bluetooth and the SD card slot all worked after your last change."
+    }
+  ]
+}

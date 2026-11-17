@@ -261,6 +261,31 @@
           "3.1"
         ]
       }
+    },
+    {
+      "id": "device-manager",
+      "title": "No sound after yesterday's update",
+      "summary": "Three devices, three different faults: a bad driver update, a disabled adapter and a missing driver. Match each fix to its fault and leave everything else alone.",
+      "minutes": 10,
+      "level": "Support",
+      "surfaces": [
+        "Device Manager"
+      ],
+      "objectives": {
+        "A+ Core 2 (220-1202)": [
+          "1.4",
+          "3.1"
+        ],
+        "CCST IT Support": [
+          "1.3",
+          "2.4",
+          "2.5"
+        ],
+        "Tech+ (FC0-U71)": [
+          "1.4",
+          "2.4"
+        ]
+      }
     }
   ],
   "sets": {
@@ -301,7 +326,8 @@
     "windows-support": {
       "title": "Windows support",
       "labs": [
-        "slow-pc"
+        "slow-pc",
+        "device-manager"
       ]
     }
   }
