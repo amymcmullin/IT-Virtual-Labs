@@ -210,6 +210,32 @@
           "6.5"
         ]
       }
+    },
+    {
+      "id": "malware-removal",
+      "title": "Pop-ups everywhere: remove the malware properly",
+      "summary": "Work the malware removal procedure in order: confirm, isolate, clean in a way that sticks, restore protection and brief the user.",
+      "minutes": 15,
+      "level": "Support",
+      "surfaces": [
+        "Task Manager",
+        "Security",
+        "System",
+        "Talk to the User"
+      ],
+      "objectives": {
+        "A+ Core 2 (220-1202)": [
+          "2.4",
+          "2.6",
+          "3.4"
+        ],
+        "CCST IT Support": [
+          "5.1"
+        ],
+        "Tech+ (FC0-U71)": [
+          "6.2"
+        ]
+      }
     }
   ],
   "sets": {
@@ -241,9 +267,10 @@
       ]
     },
     "wireless-security": {
-      "title": "Wireless and security basics",
+      "title": "Security basics",
       "labs": [
-        "router-secure"
+        "router-secure",
+        "malware-removal"
       ]
     }
   }

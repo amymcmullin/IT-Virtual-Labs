@@ -13,7 +13,7 @@ Everything runs in the browser. There is no server, no account and no student da
 | `instructor.html` | Decoder for completion codes: per-student results and the steps missed most. |
 | `labs/catalog.json` | The list of labs, their exam objectives, and the assigned sets. |
 | `labs/*.json` | One file per lab: scenario, starting state, hints and the checks that are graded. |
-| `js/` | The engine (`engine.js`), grading (`grading.js`), network model (`net.js`) and simulated tools (`surfaces.js` for Command Prompt and Network Settings, `bench.js` for the hardware workbench, `printers.js` for Printers and Services, `dir.js` for Users and Groups, Shared Folders and Access Test, `router.js` for the router admin page). |
+| `js/` | The engine (`engine.js`), grading (`grading.js`), network model (`net.js`) and simulated tools (`surfaces.js` for Command Prompt and Network Settings, `bench.js` for the hardware workbench, `printers.js` for Printers and Services, `dir.js` for Users and Groups, Shared Folders and Access Test, `router.js` for the router admin page, `malware.js` for Task Manager, Security, System and Talk to the User). |
 | `scorm/launcher/` | Template for the thin SCORM 1.2 launcher used in Canvas. |
 | `tools/build_launchers.py` | Builds one launcher zip per lab into `scorm/dist/`. |
 | `docs/` | Draft crosswalk of Tech+, CCST IT Support and A+ objectives, and the lab build order. |

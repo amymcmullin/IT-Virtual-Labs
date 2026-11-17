@@ -163,3 +163,4 @@ label.inline { margin: 0; }
 .status-list { display: grid; grid-template-columns: max-content 1fr; gap: .5rem 1.2rem; margin: 0; }
 .status-list dt { font-weight: 600; } .status-list dd { margin: 0; }
 @media (max-width: 760px) { .status-list { grid-template-columns: 1fr; gap: .1rem; } .status-list dd { margin-bottom: .6rem; } }
+.app-alert { border-color: var(--miss); border-left-width: 5px; background: var(--miss-bg); }
