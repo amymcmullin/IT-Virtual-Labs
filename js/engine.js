@@ -79,7 +79,7 @@
     if (!lab || mode !== 'practice') return;
     var g = Grading.grade(lab, state, log);
     $('live').innerHTML = g.results.map(function (r) {
-      return '<li class="' + (r.ok ? 'ok' : 'todo') + '"><span aria-hidden="true">' + (r.ok ? '✓' : '○') + '</span> ' + esc(r.label) + '<span class="sr"> — ' + (r.ok ? 'done' : 'not yet') + '</span></li>';
+      return '<li class="' + (r.ok ? 'ok' : 'todo') + '"><span aria-hidden="true">' + (r.ok ? '✓' : '○') + '</span> ' + esc(r.practice) + '<span class="sr"> — ' + (r.ok ? 'done' : 'not yet') + '</span></li>';
     }).join('');
   }
 

@@ -109,7 +109,8 @@
       "when": "before_first_change",
       "label": "Opened the printer's queue before changing anything",
       "pass": "You looked at the queue first and saw the errored document at the top.",
-      "fail": "You made a change before opening the Front Office Laser queue. The queue shows exactly what is blocking printing."
+      "fail": "You made a change before opening the Front Office Laser queue. The queue shows exactly what is blocking printing.",
+      "practice": "Gathered information before making changes"
     },
     {
       "id": "stuck",
@@ -119,7 +120,8 @@
       "equals": 0,
       "label": "Cleared the blocked queue",
       "pass": "The errored document is gone and nothing is left waiting.",
-      "fail": "The queue is still blocked. Cancel the errored document at the top; if it hangs in 'Deleting', restart the Print Spooler service, and make sure the printer is not offline or paused so the rest can print."
+      "fail": "The queue is still blocked. Cancel the errored document at the top; if it hangs in 'Deleting', restart the Print Spooler service, and make sure the printer is not offline or paused so the rest can print.",
+      "practice": "Documents are printing again"
     },
     {
       "id": "keep",
@@ -129,7 +131,8 @@
       "equals": 0,
       "label": "Kept the documents people were waiting for",
       "pass": "You removed only the faulty document, so the two waiting documents printed.",
-      "fail": "You cancelled documents that were not at fault. Coworkers were waiting for those; cancel only the errored job, not the whole queue."
+      "fail": "You cancelled documents that were not at fault. Coworkers were waiting for those; cancel only the errored job, not the whole queue.",
+      "practice": "No needed documents were lost"
     },
     {
       "id": "online",
@@ -139,7 +142,8 @@
       "equals": false,
       "label": "Printer is no longer set to 'Use printer offline'",
       "pass": "The printer is online, so the PC sends jobs to it again.",
-      "fail": "'Use printer offline' is still turned on for the Front Office Laser, so the PC holds every job instead of sending it."
+      "fail": "'Use printer offline' is still turned on for the Front Office Laser, so the PC holds every job instead of sending it.",
+      "practice": "The PC can send jobs to the printer"
     },
     {
       "id": "default",
@@ -149,7 +153,8 @@
       "equals": "fo",
       "label": "Front Office Laser is the default printer",
       "pass": "Dana's prints now go to the Front Office Laser without her choosing it.",
-      "fail": "The default printer is not the Front Office Laser. Dana's prints were being saved as PDF files, or would go to a printer she cannot reach."
+      "fail": "The default printer is not the Front Office Laser. Dana's prints were being saved as PDF files, or would go to a printer she cannot reach.",
+      "practice": "The user's prints go to the right printer"
     },
     {
       "id": "spooler",
@@ -159,7 +164,8 @@
       "equals": "running",
       "label": "Print Spooler service left running",
       "pass": "The spooler is running.",
-      "fail": "The Print Spooler service is stopped. No printer on this PC works until it is started again."
+      "fail": "The Print Spooler service is stopped. No printer on this PC works until it is started again.",
+      "practice": "Printing services are healthy"
     },
     {
       "id": "verify",
@@ -169,7 +175,8 @@
       "when": "after_last_change",
       "label": "Printed a test page on the Front Office Laser after the last change",
       "pass": "A test page printed after your final change, which proves the fix.",
-      "fail": "You did not print a successful test page on the Front Office Laser after your last change."
+      "fail": "You did not print a successful test page on the Front Office Laser after your last change.",
+      "practice": "Proved it with a test page after the last change"
     }
   ]
 }

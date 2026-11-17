@@ -144,7 +144,8 @@
       "when": "before_first_change",
       "label": "Checked the folder's permissions or Jordan's groups before changing anything",
       "pass": "You looked at how access is granted before making a change.",
-      "fail": "You made a change before looking at the Accounting folder's permissions or Jordan's group membership, so you were guessing at the cause."
+      "fail": "You made a change before looking at the Accounting folder's permissions or Jordan's group membership, so you were guessing at the cause.",
+      "practice": "Gathered information before making changes"
     },
     {
       "id": "member",
@@ -156,7 +157,8 @@
       ],
       "label": "Jordan is a member of the Accounting group",
       "pass": "Jordan is in the Accounting group, which is how the folder grants access.",
-      "fail": "Jordan is not in the Accounting group. The folder gives Modify access to that group, so membership is the fix."
+      "fail": "Jordan is not in the Accounting group. The folder gives Modify access to that group, so membership is the fix.",
+      "practice": "Access is granted the right way"
     },
     {
       "id": "edit",
@@ -166,7 +168,8 @@
       "canEdit": "accounting",
       "label": "Jordan's access allows editing files in the folder",
       "pass": "Jordan's access is Modify or better on the Accounting folder.",
-      "fail": "Jordan cannot edit files in the Accounting folder. Read access (for example through Managers) opens the folder but does not allow saving."
+      "fail": "Jordan cannot edit files in the Accounting folder. Read access (for example through Managers) opens the folder but does not allow saving.",
+      "practice": "The user has the access the job needs"
     },
     {
       "id": "policy",
@@ -180,7 +183,8 @@
       "sharesUntouched": true,
       "label": "Followed policy: group-based access and no excess privilege",
       "pass": "You left the folder permissions alone and did not put Jordan in a privileged group.",
-      "fail": "The fix breaks company policy. Do not add Jordan or Everyone to a folder's permission list, change a group's access level, or put Jordan in Managers or IT Admins. The department group already grants exactly what the job needs."
+      "fail": "The fix breaks company policy. Do not add Jordan or Everyone to a folder's permission list, change a group's access level, or put Jordan in Managers or IT Admins. The department group already grants exactly what the job needs.",
+      "practice": "The fix follows company policy"
     },
     {
       "id": "cleanup",
@@ -192,7 +196,8 @@
       ],
       "label": "Removed Jordan from the Sales group",
       "pass": "Jordan no longer has Sales access the new job does not need.",
-      "fail": "Jordan is still in the Sales group and can still change Sales files. Remove access when a person changes roles."
+      "fail": "Jordan is still in the Sales group and can still change Sales files. Remove access when a person changes roles.",
+      "practice": "Access the user no longer needs is gone"
     },
     {
       "id": "verify",
@@ -202,7 +207,8 @@
       "when": "after_last_change",
       "label": "Confirmed Jordan can save a file in the folder after the last change",
       "pass": "You tested as Jordan after your final change and the save worked.",
-      "fail": "You did not get a successful 'Save a file' test as Jordan on the Accounting folder after your last change. Remember that new group membership only applies after the user signs in again."
+      "fail": "You did not get a successful 'Save a file' test as Jordan on the Accounting folder after your last change. Remember that new group membership only applies after the user signs in again.",
+      "practice": "Confirmed as the user after the last change"
     }
   ]
 }

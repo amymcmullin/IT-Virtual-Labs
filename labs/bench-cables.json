@@ -264,7 +264,8 @@
       "switchOn": true,
       "label": "Power cord connected and power supply switched on",
       "pass": "The cord is in the inlet and the supply's rocker switch is on.",
-      "fail": "The PC has no power. It needs the power cord in the inlet and the rocker switch on the power supply set to on (I)."
+      "fail": "The PC has no power. It needs the power cord in the inlet and the rocker switch on the power supply set to on (I).",
+      "practice": "The PC has power"
     },
     {
       "id": "video",
@@ -280,7 +281,8 @@
       ],
       "label": "Monitor connected to the graphics card with the DisplayPort cable",
       "pass": "The DisplayPort cable is on the graphics card, which is the only output that is active on this PC.",
-      "fail": "The monitor will not show a picture. Use the DisplayPort cable (the monitor's only free input) on the graphics card in the expansion slot, not on the motherboard ports, which are disabled when a dedicated card is installed."
+      "fail": "The monitor will not show a picture. Use the DisplayPort cable (the monitor's only free input) on the graphics card in the expansion slot, not on the motherboard ports, which are disabled when a dedicated card is installed.",
+      "practice": "The monitor shows a picture"
     },
     {
       "id": "net",
@@ -296,7 +298,8 @@
       ],
       "label": "Network cable connected",
       "pass": "The Ethernet cable is in the RJ45 port.",
-      "fail": "The Ethernet patch cable is not connected to the RJ45 port."
+      "fail": "The Ethernet patch cable is not connected to the RJ45 port.",
+      "practice": "Wired network is connected"
     },
     {
       "id": "input",
@@ -324,7 +327,8 @@
       ],
       "label": "Keyboard and mouse connected",
       "pass": "Both input devices are on USB ports.",
-      "fail": "The keyboard and mouse both need a USB port."
+      "fail": "The keyboard and mouse both need a USB port.",
+      "practice": "Keyboard and mouse work"
     },
     {
       "id": "drive",
@@ -341,7 +345,8 @@
       ],
       "label": "Backup drive on a fast (USB 3) port",
       "pass": "The backup drive is on a blue USB 3 port, so backups run at full speed.",
-      "fail": "The backup drive is not on a blue USB 3 port. It fits a black USB 2.0 port, but it would run many times slower, and the work order asked for a fast port."
+      "fail": "The backup drive is not on a blue USB 3 port. It fits a black USB 2.0 port, but it would run many times slower, and the work order asked for a fast port.",
+      "practice": "The backup drive meets the work order"
     },
     {
       "id": "audio",
@@ -363,7 +368,8 @@
       ],
       "label": "Headset plugs in the correct audio jacks",
       "pass": "Headphones are on line out (green) and the microphone is on mic in (pink).",
-      "fail": "The headset is not connected correctly. The headphone plug goes to the green jack (line out) and the microphone plug to the pink jack; the blue jack is line in."
+      "fail": "The headset is not connected correctly. The headphone plug goes to the green jack (line out) and the microphone plug to the pink jack; the blue jack is line in.",
+      "practice": "The headset works"
     },
     {
       "id": "clean",
@@ -372,7 +378,8 @@
       "tag": "misfit",
       "label": "Did not try to plug a connector into a port it does not fit",
       "pass": "Every connector you tried went to a port of the right type.",
-      "fail": "You tried at least one connector in a port it does not fit. Match the connector shape to the port before pushing; forcing one bends pins."
+      "fail": "You tried at least one connector in a port it does not fit. Match the connector shape to the port before pushing; forcing one bends pins.",
+      "practice": "Handled connectors correctly"
     },
     {
       "id": "verify",
@@ -382,7 +389,8 @@
       "when": "after_last_change",
       "label": "Powered on and saw the desktop after the last change",
       "pass": "You tested the finished build and it started with a picture.",
-      "fail": "You did not power the PC on successfully after your last change. Always test a build before handing it over."
+      "fail": "You did not power the PC on successfully after your last change. Always test a build before handing it over.",
+      "practice": "Tested the finished build after the last change"
     }
   ]
 }

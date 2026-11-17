@@ -1,0 +1,300 @@
+{
+  "id": "router-secure",
+  "version": 1,
+  "title": "Secure the new office wireless router",
+  "scenario": "Work order #2264 \u2014 LedgerWorks, a four-person accounting office, bought a new wireless router and plugged it in straight from the box. Set it up before staff arrive. The office network must be named LedgerWorks-Office and use the strongest security on offer (every office device supports it). Clients in the waiting room need a separate guest network named LedgerWorks-Guest that cannot reach office computers. Use passphrases of at least 12 characters, a different one for each network and for the admin sign-in. The owner wants nothing left at factory defaults that would make the router easier to break into, and the firmware brought up to date.",
+  "tasks": [
+    "Read the Status page to see how the router is set right now.",
+    "Lock down who can administer the router and bring its firmware up to date.",
+    "Set up the office wireless network as the work order describes.",
+    "Set up the guest network so visitors are kept away from office computers.",
+    "Turn off convenience features that weaken security, then review the status page."
+  ],
+  "surfaces": [
+    "router"
+  ],
+  "initialState": {
+    "router": {
+      "adminPass": "admin",
+      "remote": true,
+      "firmware": {
+        "version": "1.0.2",
+        "latest": "1.4.0",
+        "checked": false
+      },
+      "ssid": "WR-5200-Setup",
+      "security": "Open (no password)",
+      "passphrase": "",
+      "wps": true,
+      "upnp": true,
+      "guest": {
+        "enabled": false,
+        "ssid": "",
+        "passphrase": "",
+        "isolate": false
+      }
+    }
+  },
+  "world": {},
+  "router": {
+    "model": "WR-5200 Wireless Router",
+    "defaultAdminPass": "admin",
+    "pages": [
+      {
+        "id": "status",
+        "title": "Status",
+        "status": true,
+        "intro": "A summary of how the router is configured right now."
+      },
+      {
+        "id": "wireless",
+        "title": "Wireless",
+        "intro": "The main network that office devices join.",
+        "fields": [
+          {
+            "path": "router.ssid",
+            "label": "Network name (SSID)",
+            "type": "text"
+          },
+          {
+            "path": "router.security",
+            "label": "Security",
+            "type": "select",
+            "options": [
+              "Open (no password)",
+              "WEP",
+              "WPA2-Personal",
+              "WPA3-Personal"
+            ]
+          },
+          {
+            "path": "router.passphrase",
+            "label": "Wireless passphrase",
+            "type": "secret",
+            "help": "Not used when security is Open."
+          }
+        ]
+      },
+      {
+        "id": "guest",
+        "title": "Guest network",
+        "intro": "An optional second network for visitors.",
+        "fields": [
+          {
+            "path": "router.guest.enabled",
+            "label": "Enable guest network",
+            "type": "check"
+          },
+          {
+            "path": "router.guest.ssid",
+            "label": "Guest network name (SSID)",
+            "type": "text"
+          },
+          {
+            "path": "router.guest.passphrase",
+            "label": "Guest passphrase",
+            "type": "secret"
+          },
+          {
+            "path": "router.guest.isolate",
+            "label": "Isolate guests from the office network",
+            "type": "check"
+          }
+        ]
+      },
+      {
+        "id": "admin",
+        "title": "Administration",
+        "intro": "Who can change this router's settings.",
+        "firmware": true,
+        "fields": [
+          {
+            "path": "router.adminPass",
+            "label": "Admin password",
+            "type": "secret",
+            "help": "The factory password is printed on the label under the router."
+          },
+          {
+            "path": "router.remote",
+            "label": "Allow remote management from the internet",
+            "type": "check"
+          }
+        ]
+      },
+      {
+        "id": "advanced",
+        "title": "Advanced",
+        "intro": "Convenience features.",
+        "fields": [
+          {
+            "path": "router.wps",
+            "label": "Wi-Fi Protected Setup (WPS): join by button or PIN",
+            "type": "check"
+          },
+          {
+            "path": "router.upnp",
+            "label": "Universal Plug and Play (UPnP): let devices open ports automatically",
+            "type": "check"
+          }
+        ]
+      }
+    ]
+  },
+  "hints": [
+    "The Status page you start on lists what is still at factory settings. Read every line before you change anything.",
+    "The first thing an attacker tries on a new router is the password printed on its label. Change it on the Administration page, where you can also update the firmware.",
+    "On the Wireless page, compare the four security choices. Open and WEP protect nothing; of the other two, the newer one is stronger.",
+    "The guest network needs four things: turned on, the right name, its own passphrase, and isolation so visitors cannot see office computers.",
+    "Remote management, WPS and UPnP are convenient, and each one gives an attacker another way in. An accounting office needs none of them.",
+    "Go back to the Status page at the end and read every line."
+  ],
+  "checks": [
+    {
+      "id": "admin",
+      "points": 15,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "router.adminPass",
+          "op": "ne",
+          "value": "admin"
+        },
+        {
+          "path": "router.adminPass",
+          "op": "minlen",
+          "value": 12
+        },
+        {
+          "path": "router.adminPass",
+          "op": "nepath",
+          "other": "router.passphrase"
+        },
+        {
+          "path": "router.adminPass",
+          "op": "nepath",
+          "other": "router.guest.passphrase"
+        }
+      ],
+      "practice": "Only the right person can administer the router",
+      "label": "Admin password changed to a unique one of at least 12 characters",
+      "pass": "The factory admin password is gone and the new one is long and not reused.",
+      "fail": "The admin password is still the factory default, shorter than 12 characters, or the same as a wireless passphrase. Anyone who can read the label or knows the Wi-Fi password could take over the router."
+    },
+    {
+      "id": "firmware",
+      "points": 10,
+      "type": "state",
+      "path": "router.firmware.version",
+      "equals": "1.4.0",
+      "practice": "The router's software is current",
+      "label": "Firmware updated to the latest version",
+      "pass": "The router is running the latest firmware, with its security fixes.",
+      "fail": "The firmware is still the version the router shipped with. Check for an update on the Administration page and install it."
+    },
+    {
+      "id": "ssid",
+      "points": 10,
+      "type": "state",
+      "path": "router.ssid",
+      "equals": "LedgerWorks-Office",
+      "practice": "The office network is named as the work order asks",
+      "label": "Office network named LedgerWorks-Office",
+      "pass": "The network name matches the work order.",
+      "fail": "The office network name does not match the work order exactly (LedgerWorks-Office). A default name also tells attackers the router's model."
+    },
+    {
+      "id": "wifi",
+      "points": 20,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "router.security",
+          "op": "eq",
+          "value": "WPA3-Personal"
+        },
+        {
+          "path": "router.passphrase",
+          "op": "minlen",
+          "value": 12
+        }
+      ],
+      "practice": "The office network is protected as the work order asks",
+      "label": "Office network uses WPA3 with a passphrase of at least 12 characters",
+      "pass": "WPA3-Personal with a long passphrase is the strongest choice this router offers.",
+      "fail": "The office network is not secured as asked. It should use WPA3-Personal, the strongest option, with a passphrase of at least 12 characters. Open has no protection and WEP can be broken in minutes."
+    },
+    {
+      "id": "guest",
+      "points": 15,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "router.guest.enabled",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "router.guest.ssid",
+          "op": "eq",
+          "value": "LedgerWorks-Guest"
+        },
+        {
+          "path": "router.guest.isolate",
+          "op": "eq",
+          "value": true
+        },
+        {
+          "path": "router.guest.passphrase",
+          "op": "minlen",
+          "value": 12
+        },
+        {
+          "path": "router.guest.passphrase",
+          "op": "nepath",
+          "other": "router.passphrase"
+        }
+      ],
+      "practice": "Visitors can get online without reaching office computers",
+      "label": "Guest network on, named LedgerWorks-Guest, isolated, with its own passphrase",
+      "pass": "Visitors have their own isolated network and passphrase.",
+      "fail": "The guest network is not set up as asked. It must be enabled, named LedgerWorks-Guest, isolated from the office network, and have its own passphrase of at least 12 characters that differs from the office one."
+    },
+    {
+      "id": "harden",
+      "points": 10,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "router.remote",
+          "op": "eq",
+          "value": false
+        },
+        {
+          "path": "router.wps",
+          "op": "eq",
+          "value": false
+        },
+        {
+          "path": "router.upnp",
+          "op": "eq",
+          "value": false
+        }
+      ],
+      "practice": "Nothing risky is left at factory settings",
+      "label": "Remote management, WPS and UPnP turned off",
+      "pass": "The three convenience features that widen the attack surface are off.",
+      "fail": "At least one of remote management, WPS or UPnP is still on. Remote management exposes the admin page to the internet, the WPS PIN can be guessed, and UPnP lets any device open ports."
+    },
+    {
+      "id": "verify",
+      "points": 20,
+      "type": "log",
+      "tag": "router:status",
+      "when": "after_last_change",
+      "practice": "Reviewed the result after the last change",
+      "label": "Reviewed the Status page after the last change",
+      "pass": "You confirmed the final configuration on the Status page.",
+      "fail": "You did not open the Status page after your last change to confirm the final configuration."
+    }
+  ]
+}

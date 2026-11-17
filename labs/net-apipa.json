@@ -71,7 +71,8 @@
       "when": "before_first_change",
       "label": "Checked the laptop's address before changing anything",
       "pass": "You ran ipconfig first and saw the 169.254 address.",
-      "fail": "You made a change before running ipconfig. The 169.254 address is the clue that explains this whole ticket."
+      "fail": "You made a change before running ipconfig. The 169.254 address is the clue that explains this whole ticket.",
+      "practice": "Gathered information before making changes"
     },
     {
       "id": "online",
@@ -80,7 +81,8 @@
       "probe": "internet",
       "label": "The laptop can reach the internet",
       "pass": "The laptop has a working address and can reach outside sites.",
-      "fail": "The laptop still cannot reach the internet. A 169.254 (APIPA) address means no DHCP lease; it needs to request one with ipconfig /renew."
+      "fail": "The laptop still cannot reach the internet. A 169.254 (APIPA) address means no DHCP lease; it needs to request one with ipconfig /renew.",
+      "practice": "The laptop can reach the internet"
     },
     {
       "id": "standard",
@@ -90,7 +92,8 @@
       "equals": "dhcp",
       "label": "The adapter still follows the site standard (DHCP)",
       "pass": "You left the adapter on DHCP, as the site standard requires.",
-      "fail": "You gave the laptop a manual address. It may work today, but it breaks the site standard and can cause an address conflict later."
+      "fail": "You gave the laptop a manual address. It may work today, but it breaks the site standard and can cause an address conflict later.",
+      "practice": "The fix follows the site standard"
     },
     {
       "id": "verify",
@@ -101,7 +104,8 @@
       "when": "after_last_change",
       "label": "Verified the fix with a successful test to an outside address",
       "pass": "After your last change you confirmed an outside address replies.",
-      "fail": "You did not run a successful ping to an outside address after your last change. A fix is not finished until you have verified it."
+      "fail": "You did not run a successful ping to an outside address after your last change. A fix is not finished until you have verified it.",
+      "practice": "Verified the fix after the last change"
     }
   ]
 }

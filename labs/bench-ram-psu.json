@@ -298,7 +298,8 @@
       ],
       "label": "Unplugged the power cord before handling internal parts",
       "pass": "You removed mains power before touching memory or the power supply.",
-      "fail": "You handled internal parts while the PC was still plugged in. Always disconnect the power cord first; the switch alone is not enough."
+      "fail": "You handled internal parts while the PC was still plugged in. Always disconnect the power cord first; the switch alone is not enough.",
+      "practice": "Made the PC safe to work on (1 of 2)"
     },
     {
       "id": "esd",
@@ -311,7 +312,8 @@
       ],
       "label": "Connected the anti-static strap before handling internal parts",
       "pass": "You grounded yourself to the case before touching components.",
-      "fail": "You handled components without first connecting the anti-static strap to bare metal. Static you cannot feel can damage memory."
+      "fail": "You handled components without first connecting the anti-static strap to bare metal. Static you cannot feel can damage memory.",
+      "practice": "Made the PC safe to work on (2 of 2)"
     },
     {
       "id": "ram",
@@ -339,7 +341,8 @@
       ],
       "label": "16 GB kit installed in slots A2 and B2, old modules removed",
       "pass": "Both 16 GB modules are in A2 and B2 and the old 4 GB modules are out: 32 GB in dual-channel mode.",
-      "fail": "The memory is not as the work order asked. Both 16 GB DDR4 modules belong in A2 and B2, with the two old 4 GB modules removed."
+      "fail": "The memory is not as the work order asked. Both 16 GB DDR4 modules belong in A2 and B2, with the two old 4 GB modules removed.",
+      "practice": "Memory matches the work order"
     },
     {
       "id": "fit",
@@ -348,7 +351,8 @@
       "tag": "misfit",
       "label": "Did not try a part where it does not fit",
       "pass": "Every part you tried matched its slot.",
-      "fail": "You tried at least one part where it does not fit. DDR3, DDR5 and SO-DIMM modules are keyed differently from DDR4 desktop slots; forcing one damages the slot."
+      "fail": "You tried at least one part where it does not fit. DDR3, DDR5 and SO-DIMM modules are keyed differently from DDR4 desktop slots; forcing one damages the slot.",
+      "practice": "Handled parts correctly"
     },
     {
       "id": "psu",
@@ -364,7 +368,8 @@
       ],
       "label": "Installed a power supply that suits next week's graphics card",
       "pass": "The 650 W supply has the PCIe 8-pin connector the card needs and comfortable headroom over 420 W.",
-      "fail": "The installed power supply does not suit the upgrade. The card needs a PCIe 8-pin connector and the system will draw about 420 W: the 450 W unit has only a 6-pin connector and almost no headroom, and the 300 W unit is too small."
+      "fail": "The installed power supply does not suit the upgrade. The card needs a PCIe 8-pin connector and the system will draw about 420 W: the 450 W unit has only a 6-pin connector and almost no headroom, and the 300 W unit is too small.",
+      "practice": "Power supply suits the planned upgrade"
     },
     {
       "id": "verify",
@@ -374,7 +379,8 @@
       "when": "after_last_change",
       "label": "Restored power and confirmed the PC starts after the last change",
       "pass": "You reconnected power, started the PC and read the memory total.",
-      "fail": "You did not successfully power the PC on after your last change. Reconnect the cord, check the switch, start the PC and confirm the memory total before handing it back."
+      "fail": "You did not successfully power the PC on after your last change. Reconnect the cord, check the switch, start the PC and confirm the memory total before handing it back.",
+      "practice": "Confirmed the PC starts after the last change"
     }
   ]
 }

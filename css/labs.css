@@ -157,3 +157,9 @@ tr.bad td { background: var(--miss-bg); }
 label.inline { margin: 0; }
 .pane-app select { width: auto; max-width: 100%; }
 .pane-app td select { min-height: 36px; padding: .2rem .5rem; }
+.subnav { display: flex; flex-wrap: wrap; gap: .4rem; border-bottom: 1px solid var(--line); padding-bottom: .7rem; margin-bottom: 1rem; }
+.subnav button[aria-pressed=true] { background: var(--accent); border-color: var(--accent); color: #fff; font-weight: 600; }
+.field-help { margin: .2rem 0 0; }
+.status-list { display: grid; grid-template-columns: max-content 1fr; gap: .5rem 1.2rem; margin: 0; }
+.status-list dt { font-weight: 600; } .status-list dd { margin: 0; }
+@media (max-width: 760px) { .status-list { grid-template-columns: 1fr; gap: .1rem; } .status-list dd { margin-bottom: .6rem; } }

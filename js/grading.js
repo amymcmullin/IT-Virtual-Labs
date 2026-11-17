@@ -18,6 +18,16 @@
       if (c.sharesUntouched && JSON.stringify(D.shares) !== JSON.stringify(lab.initialState.dir.shares)) return false;
       return true;
     }
+    if (c.type === 'rules') {           // every rule must hold: { path, op: eq | ne | minlen | nepath, value | other }
+      return c.rules.every(function (r) {
+        var v = getPath(state, r.path);
+        if (r.op === 'eq') return v === r.value;
+        if (r.op === 'ne') return v !== r.value;
+        if (r.op === 'minlen') return typeof v === 'string' && v.length >= r.value;
+        if (r.op === 'nepath') return v !== getPath(state, r.other);
+        return false;
+      });
+    }
     if (c.type === 'state') return getPath(state, c.path) === c.equals;
     if (c.type === 'probe') return !!Net.probes[c.probe](state, world);
     if (c.type === 'bench') {
@@ -52,7 +62,7 @@
     var results = lab.checks.map(function (c) {
       var ok = evalCheck(c, state, log, lab.world, lab);
       total += c.points; if (ok) earned += c.points;
-      return { id: c.id, label: c.label, points: c.points, ok: ok, text: ok ? c.pass : c.fail };
+      return { id: c.id, label: c.label, practice: c.practice || c.label, points: c.points, ok: ok, text: ok ? c.pass : c.fail };
     });
     return { results: results, earned: earned, total: total, score: total ? Math.round(100 * earned / total) : 0 };
   }

@@ -184,6 +184,32 @@
           "6.1"
         ]
       }
+    },
+    {
+      "id": "router-secure",
+      "title": "Secure the new office wireless router",
+      "summary": "A router straight from the box: change the default admin password, update firmware, secure the office network, add an isolated guest network and switch off risky features.",
+      "minutes": 12,
+      "level": "Foundation",
+      "surfaces": [
+        "Router Admin"
+      ],
+      "objectives": {
+        "A+ Core 1 (220-1201)": [
+          "2.6"
+        ],
+        "A+ Core 2 (220-1202)": [
+          "2.3",
+          "2.10"
+        ],
+        "CCST IT Support": [
+          "3.3"
+        ],
+        "Tech+ (FC0-U71)": [
+          "2.9",
+          "6.5"
+        ]
+      }
     }
   ],
   "sets": {
@@ -212,6 +238,12 @@
       "title": "Accounts and access",
       "labs": [
         "share-access"
+      ]
+    },
+    "wireless-security": {
+      "title": "Wireless and security basics",
+      "labs": [
+        "router-secure"
       ]
     }
   }

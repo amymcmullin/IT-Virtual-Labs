@@ -72,7 +72,8 @@
       "when": "before_first_change",
       "label": "Reviewed the full configuration (ipconfig /all) before changing anything",
       "pass": "You ran ipconfig /all first, which is the view that shows the DNS server.",
-      "fail": "You did not run ipconfig /all before making a change. Plain ipconfig hides the DNS server, which is where this fault is."
+      "fail": "You did not run ipconfig /all before making a change. Plain ipconfig hides the DNS server, which is where this fault is.",
+      "practice": "Gathered information before making changes"
     },
     {
       "id": "byip",
@@ -83,7 +84,8 @@
       "when": "before_first_change",
       "label": "Showed that outside addresses are reachable by IP",
       "pass": "A successful ping to an outside IP proved the network path was fine.",
-      "fail": "You did not ping an outside IP address before changing anything. That test is what rules out the gateway and the connection."
+      "fail": "You did not ping an outside IP address before changing anything. That test is what rules out the gateway and the connection.",
+      "practice": "Tested what still works before making changes"
     },
     {
       "id": "byname",
@@ -93,7 +95,8 @@
       "when": "before_first_change",
       "label": "Tested name lookup before changing anything",
       "pass": "You tested a name (ping by name or nslookup) and saw the lookup fail.",
-      "fail": "You did not test a name with ping or nslookup before changing anything, so you had no evidence the fault was DNS."
+      "fail": "You did not test a name with ping or nslookup before changing anything, so you had no evidence the fault was DNS.",
+      "practice": "Tested what is failing before making changes"
     },
     {
       "id": "resolves",
@@ -102,7 +105,8 @@
       "probe": "dns",
       "label": "Names resolve and sites are reachable",
       "pass": "The PC can look up names and reach the sites behind them.",
-      "fail": "Names still do not resolve. The PC is asking 192.168.10.100, the retired server; it needs a working DNS server."
+      "fail": "Names still do not resolve. The PC is asking 192.168.10.100, the retired server; it needs a working DNS server.",
+      "practice": "Websites and the file server open by name"
     },
     {
       "id": "standard",
@@ -112,7 +116,8 @@
       "equals": "auto",
       "label": "The DNS server follows the site standard (automatic)",
       "pass": "The DNS server now comes from DHCP, so the next server change will not break this PC.",
-      "fail": "The DNS server is still typed in by hand. Even with a working address, a manual entry is what caused this ticket and breaks the site standard."
+      "fail": "The DNS server is still typed in by hand. Even with a working address, a manual entry is what caused this ticket and breaks the site standard.",
+      "practice": "The fix follows the site standard"
     },
     {
       "id": "verify",
@@ -123,7 +128,8 @@
       "when": "after_last_change",
       "label": "Verified the fix with a successful name test",
       "pass": "After your last change you confirmed a name resolves.",
-      "fail": "You did not run a successful ping by name or nslookup after your last change. Verify with the same kind of test that showed the fault."
+      "fail": "You did not run a successful ping by name or nslookup after your last change. Verify with the same kind of test that showed the fault.",
+      "practice": "Verified the fix after the last change"
     }
   ]
 }
