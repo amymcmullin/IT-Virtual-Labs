@@ -1,0 +1,188 @@
+{
+  "id": "vm-sandbox",
+  "version": 1,
+  "title": "Build a sandbox VM for a legacy app",
+  "scenario": "Work order #2290 \u2014 The accounting trainer needs a virtual machine on the lab host LAB-HV01 to test LedgerClassic 9, an old accounting program. The vendor supports it only on LegacyOS 7 (32-bit), and it has not had a security update in years, so the VM must not be able to reach the office network or the internet. Name the VM ACCT-TEST and give it 2 virtual processors and a 60 GB virtual disk. Give it as much memory as the guest operating system can actually use, but always leave at least 6 GB of the host's memory unassigned for the host itself. Virtual disks belong on the VM storage drive, never on the operating system drive. Install the guest OS, keep a clean point to return to before LedgerClassic goes in, then install the app and prove it runs. The existing VM, PRINT-TEST, is in use by another trainer all day.",
+  "tasks": [
+    "Work out the memory and storage the new VM can have on this host.",
+    "Create ACCT-TEST to match the work order.",
+    "Install the guest operating system and save a clean point to return to.",
+    "Install LedgerClassic 9 and prove it runs.",
+    "Do not disturb anyone else's work on the host."
+  ],
+  "surfaces": [
+    "hypervisor"
+  ],
+  "vmApp": {
+    "name": "LedgerClassic 9",
+    "iso": "LegacyOS 7 (32-bit)",
+    "minRamGB": 2
+  },
+  "initialState": {
+    "hv": {
+      "host": {
+        "name": "LAB-HV01",
+        "ramGB": 16,
+        "cores": 8
+      },
+      "drives": {
+        "C": {
+          "freeGB": 85
+        },
+        "D": {
+          "freeGB": 900
+        }
+      },
+      "isos": [
+        "CurrentOS 11 (64-bit)",
+        "LegacyOS 7 (32-bit)",
+        "LegacyOS 7 (64-bit)",
+        "Server Linux 24 (64-bit)"
+      ],
+      "vms": {
+        "print": {
+          "name": "PRINT-TEST",
+          "iso": "CurrentOS 11 (64-bit)",
+          "ramGB": 6,
+          "cpus": 2,
+          "diskGB": 80,
+          "drive": "D",
+          "net": "nat",
+          "running": true,
+          "osInstalled": true,
+          "appInstalled": false,
+          "snapshots": [],
+          "locked": true
+        }
+      }
+    }
+  },
+  "world": {},
+  "hints": [
+    "Start with the host summary: how much memory is installed, and how much is already assigned?",
+    "16 GB installed, 6 GB already assigned to PRINT-TEST, and 6 GB must stay with the host. That leaves a ceiling for the new VM.",
+    "A 32-bit operating system cannot use more than 4 GB of memory, however much you assign.",
+    "The ticket says the VM must not reach the office network or the internet. Read the three network types carefully.",
+    "Take a snapshot after the guest OS is installed and before LedgerClassic goes in. That is the clean point to return to.",
+    "Do not shut down, change or delete PRINT-TEST. Someone is using it.",
+    "Finish with the LedgerClassic test inside ACCT-TEST."
+  ],
+  "checks": [
+    {
+      "id": "spec",
+      "points": 15,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "hv.vms.new.name",
+          "op": "eq",
+          "value": "ACCT-TEST"
+        },
+        {
+          "path": "hv.vms.new.iso",
+          "op": "eq",
+          "value": "LegacyOS 7 (32-bit)"
+        },
+        {
+          "path": "hv.vms.new.cpus",
+          "op": "eq",
+          "value": 2
+        }
+      ],
+      "practice": "The VM matches the request",
+      "label": "ACCT-TEST created from the LegacyOS 7 (32-bit) ISO with 2 processors",
+      "pass": "The VM has the right name, guest operating system and processor count.",
+      "fail": "The VM does not match the work order: it should be named ACCT-TEST, built from the LegacyOS 7 (32-bit) ISO, with 2 virtual processors."
+    },
+    {
+      "id": "ram",
+      "points": 15,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "hv.vms.new.ramGB",
+          "op": "eq",
+          "value": 4
+        }
+      ],
+      "practice": "Memory is sized correctly for the guest and the host",
+      "label": "Assigned 4 GB of memory",
+      "pass": "4 GB is the most a 32-bit guest can use, and it leaves 6 GB unassigned for the host.",
+      "fail": "The memory is not right. A 32-bit guest can use at most 4 GB, and with 6 GB already assigned to PRINT-TEST and 6 GB reserved for the host, 4 GB is also the most this host can spare. Less wastes nothing but limits the VM; more is wasted and breaks the host rule."
+    },
+    {
+      "id": "storage",
+      "points": 15,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "hv.vms.new.drive",
+          "op": "eq",
+          "value": "D"
+        },
+        {
+          "path": "hv.vms.new.diskGB",
+          "op": "eq",
+          "value": 60
+        }
+      ],
+      "practice": "The VM is stored where it belongs",
+      "label": "60 GB virtual disk stored on the D: VM storage drive",
+      "pass": "The 60 GB disk is on the VM storage drive.",
+      "fail": "The virtual disk is not as the work order asked: 60 GB, on D:. Putting VM disks on the operating system drive can fill it and stop the host."
+    },
+    {
+      "id": "net",
+      "points": 15,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "hv.vms.new.net",
+          "op": "eq",
+          "value": "internal"
+        }
+      ],
+      "practice": "The sandbox cannot reach other networks",
+      "label": "Network set to Internal (isolated)",
+      "pass": "An internal network keeps the unpatched guest away from the office network and the internet.",
+      "fail": "The VM can reach other networks. Bridged joins the office network and NAT reaches the internet; an unpatched sandbox needs the Internal (isolated) network."
+    },
+    {
+      "id": "snapshot",
+      "points": 15,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "hv.vms.new.cleanSnapshot",
+          "op": "eq",
+          "value": true
+        }
+      ],
+      "practice": "There is a clean point to return to",
+      "label": "Took a snapshot after installing the guest OS and before installing the app",
+      "pass": "The trainer can revert to a clean guest at any time.",
+      "fail": "There is no snapshot of the clean guest. Take one after the OS is installed and before LedgerClassic is installed, so testing can always start over from a known state."
+    },
+    {
+      "id": "existing",
+      "points": 10,
+      "type": "log_none",
+      "tag": "vm:touch:locked",
+      "practice": "Other people's work was not disturbed",
+      "label": "Left PRINT-TEST running and unchanged",
+      "pass": "You did not interrupt the VM another trainer was using.",
+      "fail": "You shut down, changed or deleted PRINT-TEST while another trainer was using it. The new VM fits on the host without touching it."
+    },
+    {
+      "id": "verify",
+      "points": 15,
+      "type": "log",
+      "tag": "vm:test:ok",
+      "when": "after_last_change",
+      "practice": "Confirmed the app works after the last change",
+      "label": "Ran the LedgerClassic test successfully after the last change",
+      "pass": "LedgerClassic ran inside ACCT-TEST after your final change.",
+      "fail": "You did not run a successful LedgerClassic test inside ACCT-TEST after your last change."
+    }
+  ]
+}

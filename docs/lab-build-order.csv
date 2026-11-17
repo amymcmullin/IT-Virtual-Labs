@@ -8,7 +8,7 @@ Build order,Lab,Tier,Tech+ FC0-U71,CCST IT Support,A+ Core 1 220-1201,A+ Core 2 
 7,New team member can't open the department folder,2 Support,"1.4, 6.1","1.3, 3.1",,"1.7, 2.1, 2.2","Users and Groups, Shared Folders, Access Test",Built
 8,Secure the new office wireless router,1 Foundation,"2.9, 6.5",3.3,2.6,"2.3, 2.10",Router admin page,Built
 9,Pop-ups everywhere: remove the malware properly,2 Support,6.2,5.1,,"2.4, 2.6, 3.4","Task Manager, Security, System, Talk to the User",Built
-10,Create a virtual machine that meets the request,2 Support,2.6,4.4,4.1,,Hypervisor manager,Hypervisor manager
-11,The app won't install: check requirements and source,2 Support,3.3,"4.5, 2.2",,1.10,"System info, Installer","System info, Installer"
+10,Build a sandbox VM for a legacy app,2 Support,2.6,4.4,4.1,,Hypervisor,Built
+11,The design app won't install,2 Support,"1.4, 3.3","2.5, 4.5",,1.10,"Talk to the User, System Information, Software Install, Disk Cleanup",Built
 12,"The PC that takes forever (runaway process, startup apps)",2 Support,"1.4, 3.1","1.3, 4.1",,"1.4, 3.1","Talk to the User, Task Manager",Built
 13,No sound after yesterday's update (three device faults),2 Support,"1.4, 2.4","1.3, 2.4, 2.5",,"1.4, 3.1",Device Manager,Built

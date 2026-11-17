@@ -286,6 +286,53 @@
           "2.4"
         ]
       }
+    },
+    {
+      "id": "vm-sandbox",
+      "title": "Build a sandbox VM for a legacy app",
+      "summary": "Size a virtual machine for a 32-bit guest on a shared host, isolate it, snapshot the clean install and prove the app runs, without disturbing anyone else.",
+      "minutes": 12,
+      "level": "Support",
+      "surfaces": [
+        "Hypervisor"
+      ],
+      "objectives": {
+        "A+ Core 1 (220-1201)": [
+          "4.1"
+        ],
+        "CCST IT Support": [
+          "4.4"
+        ],
+        "Tech+ (FC0-U71)": [
+          "2.6"
+        ]
+      }
+    },
+    {
+      "id": "app-install",
+      "title": "The design app won't install",
+      "summary": "Check the PC against the requirements, free space safely, avoid the unknown installer and install the right edition from the approved source.",
+      "minutes": 12,
+      "level": "Support",
+      "surfaces": [
+        "Talk to the User",
+        "System Information",
+        "Software Install",
+        "Disk Cleanup"
+      ],
+      "objectives": {
+        "A+ Core 2 (220-1202)": [
+          "1.10"
+        ],
+        "CCST IT Support": [
+          "2.5",
+          "4.5"
+        ],
+        "Tech+ (FC0-U71)": [
+          "1.4",
+          "3.3"
+        ]
+      }
     }
   ],
   "sets": {
@@ -327,7 +374,14 @@
       "title": "Windows support",
       "labs": [
         "slow-pc",
-        "device-manager"
+        "device-manager",
+        "app-install"
+      ]
+    },
+    "virtualization": {
+      "title": "Virtualization",
+      "labs": [
+        "vm-sandbox"
       ]
     }
   }

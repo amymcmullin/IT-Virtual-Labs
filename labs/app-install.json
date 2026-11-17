@@ -1,0 +1,237 @@
+{
+  "id": "app-install",
+  "version": 1,
+  "title": "The design app won't install",
+  "scenario": "Ticket #4703 \u2014 Morgan (DESIGN-PC-11) starts on the design team on Monday and needs PlanPro Design 2026 to create and edit client drawings. Morgan says the installation keeps failing. The vendor's requirements are a 64-bit operating system, 16 GB of memory, a graphics card with at least 4 GB of video memory, and 12 GB of free storage. Company policy: software is installed only from the company software portal.",
+  "tasks": [
+    "Find out what Morgan tried and check the PC against the vendor's requirements.",
+    "Clear whatever stands in the way of a safe installation without losing Morgan's files.",
+    "Install the edition of PlanPro that does the job, the way policy requires.",
+    "Prove PlanPro works before you close the ticket.",
+    "Tell Morgan what they need to know."
+  ],
+  "surfaces": [
+    "userchat",
+    "sysinfo",
+    "installer",
+    "cleanup"
+  ],
+  "sys": {
+    "diskGB": 256,
+    "rows": [
+      [
+        "Operating system",
+        "CurrentOS 11 Pro, 64-bit"
+      ],
+      [
+        "Processor",
+        "8 cores, 3.2 GHz"
+      ],
+      [
+        "Memory",
+        "16 GB"
+      ],
+      [
+        "Graphics",
+        "Dedicated graphics card, 6 GB video memory"
+      ]
+    ]
+  },
+  "app": {
+    "name": "PlanPro",
+    "needGB": 12,
+    "portal": [
+      {
+        "id": "viewer",
+        "label": "PlanPro Viewer 2026 (free)",
+        "desc": "Opens and prints drawings. Cannot create or edit them.",
+        "full": false,
+        "testFail": "The drawing opened read-only. The Viewer cannot create or edit drawings."
+      },
+      {
+        "id": "full32",
+        "label": "PlanPro Design 2026 (32-bit)",
+        "desc": "Full edition for older 32-bit systems.",
+        "full": false,
+        "warn": "Setup note: the 32-bit edition can use at most 4 GB of memory.",
+        "testFail": "PlanPro: \"Out of memory. This drawing is too large for the 32-bit edition.\""
+      },
+      {
+        "id": "full64",
+        "label": "PlanPro Design 2026 (64-bit)",
+        "desc": "Full edition for 64-bit systems.",
+        "full": true
+      }
+    ]
+  },
+  "user": {
+    "name": "Morgan",
+    "story": "I found PlanPro on a free download site, but when I ran the installer it said the publisher was unknown, so I stopped and called you. Also, all my client drawings are in my Downloads folder, so please don't lose those.",
+    "advice": [
+      {
+        "text": "\"It's installed now. You're all set.\"",
+        "short": "vague reassurance",
+        "good": false,
+        "reply": "Great. Next time I need something I'll just look on that download site again."
+      },
+      {
+        "text": "\"The download site's copy wasn't from the vendor and could have carried malware, so stopping was the right call. Work software comes from the company software portal; if what you need isn't there, ask IT. Also, your drawings are safer in Documents than in Downloads.\"",
+        "short": "explained the risk, the approved source and where to keep files",
+        "good": true,
+        "reply": "Thanks. I'll use the portal from now on and move my drawings to Documents."
+      },
+      {
+        "text": "\"Downloading software is against policy. Don't do it again.\"",
+        "short": "scolded the user",
+        "good": false,
+        "reply": "Sorry. I was only trying to get ready for Monday."
+      }
+    ]
+  },
+  "initialState": {
+    "userchat": {
+      "briefed": null
+    },
+    "pc": {
+      "freeGB": 5.2,
+      "installed": null,
+      "ranUnknown": false,
+      "userDataLost": false,
+      "cleanup": {
+        "temp": {
+          "label": "Temporary files",
+          "gb": 3.1
+        },
+        "updates": {
+          "label": "Previous update files",
+          "gb": 4.5
+        },
+        "recycle": {
+          "label": "Recycle Bin",
+          "gb": 2.4
+        },
+        "thumbs": {
+          "label": "Thumbnails",
+          "gb": 0.2
+        },
+        "downloads": {
+          "label": "Downloads folder",
+          "gb": 4.0,
+          "note": "everything in your Downloads folder",
+          "userData": true,
+          "clearsDownloads": true
+        }
+      },
+      "downloads": [
+        {
+          "name": "PlanPro_Setup_FREE.exe",
+          "desc": "0.3 GB \u00b7 downloaded from free-software-mirror.example",
+          "exe": true,
+          "gb": 0.3,
+          "from": "free-software-mirror.example"
+        },
+        {
+          "name": "Client drawings",
+          "desc": "Folder \u00b7 3.7 GB \u00b7 Morgan's client drawings"
+        }
+      ]
+    }
+  },
+  "world": {},
+  "hints": [
+    "Ask Morgan what happened, then compare System Information with the vendor's requirements in the ticket.",
+    "The PC meets the processor, memory and graphics requirements. One requirement is not met yet.",
+    "Disk Cleanup can free space, but read each item. One of them deletes files Morgan needs.",
+    "Policy says where software comes from. The downloaded installer is from an unknown publisher; do not run it.",
+    "The portal offers three versions. Only one can create and edit drawings on this 64-bit PC without running out of memory.",
+    "Open PlanPro with a sample drawing to prove it works, then brief Morgan."
+  ],
+  "checks": [
+    {
+      "id": "look",
+      "points": 10,
+      "type": "log",
+      "tag": "sysinfo:view",
+      "when": "before_first_change",
+      "practice": "Gathered information before making changes",
+      "label": "Checked the PC against the vendor's requirements before changing anything",
+      "pass": "You compared System Information with the requirements before acting.",
+      "fail": "You made a change before checking System Information against the vendor's requirements, so you could not know what was blocking the install."
+    },
+    {
+      "id": "keep",
+      "points": 15,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "pc.userDataLost",
+          "op": "eq",
+          "value": false
+        }
+      ],
+      "practice": "No user files were lost",
+      "label": "Freed space without deleting Morgan's files",
+      "pass": "You freed space from temporary and system files and left the Downloads folder alone.",
+      "fail": "You deleted the Downloads folder in Disk Cleanup, which held Morgan's client drawings. Temporary files and previous update files alone free enough space."
+    },
+    {
+      "id": "source",
+      "points": 25,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "pc.ranUnknown",
+          "op": "eq",
+          "value": false
+        },
+        {
+          "path": "pc.installed",
+          "op": "ne",
+          "value": null
+        }
+      ],
+      "practice": "Software came from a safe source",
+      "label": "Installed from the company portal and never ran the unknown installer",
+      "pass": "PlanPro came from the approved portal, and the downloaded installer was never run.",
+      "fail": "Either PlanPro was not installed, or the installer from the unknown publisher was run. That file was not from the vendor and added unwanted programs; only the company portal is approved."
+    },
+    {
+      "id": "edition",
+      "points": 20,
+      "type": "rules",
+      "rules": [
+        {
+          "path": "pc.installed",
+          "op": "eq",
+          "value": "full64"
+        }
+      ],
+      "practice": "The edition installed meets the user's needs",
+      "label": "Installed PlanPro Design 2026 (64-bit)",
+      "pass": "The 64-bit full edition can create and edit drawings and use all 16 GB of memory.",
+      "fail": "The wrong edition is installed, or none. The Viewer cannot edit drawings, and the 32-bit edition is limited to 4 GB of memory. This 64-bit PC needs the 64-bit edition."
+    },
+    {
+      "id": "verify",
+      "points": 20,
+      "type": "log",
+      "tag": "apptest:ok",
+      "when": "after_last_change",
+      "practice": "Confirmed the app works after the last change",
+      "label": "Opened a sample drawing successfully after the last change",
+      "pass": "PlanPro opened a sample drawing after your final change.",
+      "fail": "You did not open a sample drawing in PlanPro successfully after your last change."
+    },
+    {
+      "id": "educate",
+      "points": 10,
+      "type": "state",
+      "path": "userchat.briefed",
+      "equals": "good",
+      "practice": "The user knows what to do next time",
+      "label": "Explained the risk and the approved source to Morgan",
+      "pass": "You explained why the download was risky, where software comes from and where to keep files.",
+      "fail": "Morgan was not given useful guidance. Explain the risk of the download site and the approved source, without being vague or scolding."
+    }
+  ]
+}

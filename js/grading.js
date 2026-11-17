@@ -23,6 +23,7 @@
         var v = getPath(state, r.path);
         if (r.op === 'eq') return v === r.value;
         if (r.op === 'ne') return v !== r.value;
+        if (r.op === 'gte') return typeof v === 'number' && v >= r.value;
         if (r.op === 'minlen') return typeof v === 'string' && v.length >= r.value;
         if (r.op === 'nepath') return v !== getPath(state, r.other);
         return false;
